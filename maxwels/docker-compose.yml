@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+
+    nginx:
+        image: nginx:1
+        ports:
+            - "80:80"
+            - "443:443"
+        links:
+            - php
+        volumes:
+            - ../MaxwelsProgramming/MaxwelsProgramming/phpStuff/:/app
+            - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+
+    php:
+        build: php
+        volumes:
+            - ../MaxwelsProgramming/MaxwelsProgramming/phpStuff:/app
+        working_dir: /app
+
+    db:
+        image: mysql:8
+        environment:
+            MYSQL_ROOT_PASSWORD: "supersicher"
+            MYSQL_USER: "maxim"
+            MYSQL_PASSWORD: "maxim_password"
+        volumes:
+            - ../MaxwelsProgramming/MaxwelsProgramming/mysql_data:/var/lib/mysql
+
+    phpmyadmin:
+        image: phpmyadmin:5
+        ports:
+            - "8080:80"
+        environment:
+            PMA_ARBITRARY: 1
