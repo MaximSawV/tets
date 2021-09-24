@@ -1,8 +1,18 @@
 <html>
     <?php
-        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-        header("Cache-Control: post-check=0, pre-check=0", false);
-        header("Pragma: no-cache");
+        date_default_timezone_set('Europe/Amsterdam');
+        $servername = "db";
+        $username = "maxim";
+        $password = "maxim_password";
+        $dbname ="6min";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
     ?>
     <head>
         <link rel="stylesheet" href="style.css"/>
@@ -27,7 +37,11 @@
             <div class="body">
                 <div class="text-field">
                     <?php
-                        echo("<h1>Spruch des Tages</h1>");
+                        $day = date("l");
+                        $sqlGetWeekday = $conn->query("SELECT `Quote` as quote FROM `Quote_of_the_day` WHERE `Day_of_week` = '$day'");
+                        $row = $sqlGetWeekday -> fetch_assoc();
+                        $quote = $row['quote'];
+                        echo("<h1>$quote</h1>");
                     ?>
                 </div>
                 <div class="counter-field">
@@ -42,6 +56,5 @@
                 </div>
             </div>
         </div>
-    </div>
     </body>
 </html>

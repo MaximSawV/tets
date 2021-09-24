@@ -1,6 +1,3 @@
-
-
-
 function createGreeting () {
     let greeting;
     let today = new Date();
