@@ -25,6 +25,7 @@
 //Patterns----------------------------------------------------------------------------}
 
 
+
 //Mainpage----------------------------------------------------------------------------{
 
 .cover {
@@ -35,20 +36,12 @@
     transition: 0.1s;
 }
 
-
+//~~Header----------------------------------------------------------------------------{
 
 .header {
     @include pattern(flex, fixed, 10%, 100%, #ebd294);
     @include pos(0, 0, none, none);
     z-index: 0;
-}
-
-.menu-button {
-    @include pattern(flex, fixed, 10%, 25%, #fff5dd);
-    @include text();
-    @include pos(0, 0, none, none);
-    z-index: 2;
-
 }
 
 .head {
@@ -59,6 +52,46 @@
 }
 
 
+
+//~~/~~Menu---------------------------------------------------------------------------{
+
+.menu-button {
+    @include pattern(flex, fixed, 10%, 25%, #fff5dd);
+    @include text();
+    @include pos(0, 0, none, none);
+    z-index: 2;
+}
+
+.menu-list {
+    @include pattern(none, fixed, fit-content, fit-content, transparent);
+    min-width: 100%;
+    min-height: 40%;
+    @include pos(0, 0, none, none);
+    flex-direction: column;
+    text-decoration: none;
+    z-index: 2;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    z-index: 3;
+    overflow: visible;
+
+    & > li {
+        @include pattern(flex, relative, 25%, 100%, #ff1d1d);
+        @include text();
+    }
+}
+
+
+//~~/~~Menu---------------------------------------------------------------------------}
+
+
+
+//~~Header----------------------------------------------------------------------------}
+
+
+
+//~~Body------------------------------------------------------------------------------{
 
 .body {
     @include pattern(flex, fixed, 90%, 100%, #ebd294);
@@ -83,5 +116,9 @@
     @include pos(60%, 0, none, none);
     @include text();
 }
+
+//~~Body------------------------------------------------------------------------------}
+
+
 
 //Mainpage----------------------------------------------------------------------------}

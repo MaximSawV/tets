@@ -48,3 +48,7 @@ function setGreeting() {
     let greeting = createGreeting();
     document.getElementById("greeting2").innerHTML = (greeting);
 }
+
+function openMenu () {
+    document.getElementById("menu").style.display = "flex";
+}
