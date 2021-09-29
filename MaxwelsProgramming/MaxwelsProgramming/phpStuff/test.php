@@ -1,7 +1,9 @@
+<?php
+    session_start();
+?>
 <html>
     <head>
         <?php
-
             $servername = "db";
             $username = "maxim";
             $password = "maxim_password";
@@ -20,6 +22,13 @@
             echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>");
 
             include 'class.php';
+
+            if (isset($_SESSION['user']) && isset($_SESSION['login-password'])) {
+                echo('<script>loginOut()</script>');
+                $loggedIn = $_SESSION['user'];
+                $test = 2;
+                var_dump($_SESSION['user']);
+            }
         ?>
         <title>
             Maxwels
@@ -60,6 +69,8 @@
                                     }
 
                                     if ($test == 2 ) {
+                                        $_SESSION['user'] = $loggedIn;
+                                        $_SESSION['login-password'] = $password;
                                     } else {
                                         echo('<script/>logout()</script>');
                                         http_response_code(400);
@@ -76,17 +87,19 @@
                 </li>
                 <?php
                     if ($test == 2 ) {
+                        var_dump($_SESSION['user']);
+                        var_dump($loggedIn);
                         echo('<script>test()</script>');
 
                         $sqlTestIs = "SELECT `is` from `user` WHERE `ID` = '$loggedIn';";
                         $TestIs = $conn->query($sqlTestIs);
                         while($row = mysqli_fetch_assoc($TestIs)) {
                             if($row["is"] == "Programmer" || $row["is"] == "Master") {
-                                echo ("<li> <a href='http://localhost/htmlProject/phpStuff/requestProgrammer.php?user=$loggedIn' target='_blank' id='request'> Requests </a> </li>");
+                                echo ("<li> <a href='http://localhost/htmlProject/phpStuff/requestProgrammer.php' target='_blank' id='request'> Requests </a> </li>");
                             }
 
                             if($row["is"] == "Customer") {
-                                echo("<il> <a href='http://localhost/htmlProject/phpStuff/requestCustomer.php?user=$loggedIn' target='_blank' id='request'> Requests </a> </li>");
+                                echo("<il> <a href='http://localhost/htmlProject/phpStuff/requestCustomer.php' target='_blank' id='request'> Requests </a> </li>");
                             }
                         }
                         echo('<li><a onclick="logout()"> Logout </a></li>');
@@ -94,7 +107,7 @@
                 ?>
                 <li>
                     <a href="#statistic">
-                        About Us
+                        About
                     </a>
                 </li>
                 <li>
@@ -115,8 +128,8 @@
             </ul>
 
             <div class="header">
-                <img id="websiteLogo" src="maxwel_cover (2).jpg" width="100%"/>
-                <img style="top: 0" class="side-menu-button2" id="smButton" onmouseover="openSideMenu()" src="menu.png" height="50px" width="100px"/>
+                <img id="websiteLogo" src="maxwel_cover(2).jpg" width="100%"/>
+                <img style="top: 0" class="side-menu-button2" id="smButton" onclick="openSideMenu()" src="menu.png" height="50px" width="100px"/>
             </div>
             <div class="spacer">
                 <p> Programmer you can trust! </p>

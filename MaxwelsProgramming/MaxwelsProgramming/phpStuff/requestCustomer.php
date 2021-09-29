@@ -93,7 +93,7 @@
                     <li>
                         <form class="search-field">
                             <input class="type-field" type="text" name="search" placeholder="Name/Mail/ID..."/>
-                            <input class="search-button" type="submit" value="🔎" onclick="search($_GET['search'])"/>
+                            <input class="search-button" type="submit" value="🔎" onclick="search($_GET['user'], $_GET['search'])"/>
                         </form>
 
                     </li>

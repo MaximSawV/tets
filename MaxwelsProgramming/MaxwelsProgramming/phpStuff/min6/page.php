@@ -34,8 +34,8 @@
                 <div class="menu-button" onclick="openMenu()" id="head">
                     Menü
                 </div>
-                <div id="menu">
-                    <ul>
+                <div>
+                    <ul class="menu-list" id="menu">
                         <li>
                             <a>
                                 Kalender

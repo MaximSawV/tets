@@ -47,7 +47,7 @@ function showLogin() {
 }
 
 function logout() {
-    self.location = "http://localhost/htmlProject/phpStuff/test.php";
+    self.location = "http://localhost/test.php";
 }
 
 function loginOut() {
@@ -224,8 +224,8 @@ function submitColorChange() {
     document.getElementById("programms").style.background = "linear-gradient(to bottom, "+ color1 +" 0%, " + color2 +" 100%)";
 }
 
-function search(seek) {
-    fetch("http://localhost/htmlProject/phpStuff/search.php?search="+seek, {
+function search(user, seek) {
+    fetch("http://localhost/htmlProject/phpStuff/search.php?user="+user+"&search="+seek, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",

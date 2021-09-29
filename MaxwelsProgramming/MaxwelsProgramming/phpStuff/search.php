@@ -13,6 +13,7 @@
     }
 
     $searchText = $_GET['search'];
+    var_dump($searchText);
     $searchUser = $conn->query("SELECT * FROM `user` WHERE `ID` = '$searchText' OR `Username` = '$searchText' OR `Email` = '$searchText'") or die($conn->error);
     
 ?>

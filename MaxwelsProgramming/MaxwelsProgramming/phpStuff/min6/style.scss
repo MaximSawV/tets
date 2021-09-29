@@ -1,8 +1,7 @@
 //Patterns----------------------------------------------------------------------------{
 
-@mixin pattern ($display, $pos, $height, $width, $bg) {
+@mixin pattern ($display, $height, $width, $bg) {
     display: $display;
-    position: $pos;
     height: $height;
     width: $width;
     background: $bg;
@@ -15,23 +14,22 @@
     justify-content: center;
 }
 
-@mixin pos ($top, $left, $right, $bottom) {
-    top: $top;
-    left: $left;
-    right: $right;
-    bottom: $bottom;
-}
+
 
 //Patterns----------------------------------------------------------------------------}
 
-
+body {
+    margin: 0;
+}
 
 //Mainpage----------------------------------------------------------------------------{
 
 .cover {
-    @include pattern(flex, fixed, 100%, 100%, #fff5dd);
+    @include pattern(flex, 100%, 100%, #fff5dd);
+    position: fixed;
+    left: 0;
+    top: 0;
     @include text();
-    @include pos(0, 0, none, none);
     z-index: 3;
     transition: 0.1s;
 }
@@ -39,16 +37,13 @@
 //~~Header----------------------------------------------------------------------------{
 
 .header {
-    @include pattern(flex, fixed, 10%, 100%, #ebd294);
-    @include pos(0, 0, none, none);
-    z-index: 0;
+    @include pattern(flex, 10%, 100%, #ebd294);
+    align-items: center;
 }
 
 .head {
-    @include pattern(flex, fixed, 10%, 100%, #ebd294);
+    @include pattern(flex, 10%, 100%, #ebd294);
     @include text();
-    @include pos(0, 0, none, none);
-    z-index: 1;
 }
 
 
@@ -56,29 +51,27 @@
 //~~/~~Menu---------------------------------------------------------------------------{
 
 .menu-button {
-    @include pattern(flex, fixed, 10%, 25%, #fff5dd);
+    @include pattern(flex, 100%, 25%, #fff5dd);
     @include text();
-    @include pos(0, 0, none, none);
-    z-index: 2;
+    transition: 0.5s;
+
 }
 
 .menu-list {
-    @include pattern(none, fixed, fit-content, fit-content, transparent);
-    min-width: 100%;
-    min-height: 40%;
-    @include pos(0, 0, none, none);
+    @include pattern(none, 40%, 100%, transparent);
     flex-direction: column;
     text-decoration: none;
-    z-index: 2;
     margin: 0;
     padding: 0;
-    list-style-type: none;
-    z-index: 3;
-    overflow: visible;
+    position: fixed;
+    top: 0;
+    left: 0;
 
     & > li {
-        @include pattern(flex, relative, 25%, 100%, #ff1d1d);
+        @include pattern(flex, 25%, 100%, #ff1d1d);
         @include text();
+        list-style-type: none;
+        margin: -1;
     }
 }
 
@@ -94,26 +87,23 @@
 //~~Body------------------------------------------------------------------------------{
 
 .body {
-    @include pattern(flex, fixed, 90%, 100%, #ebd294);
-    @include pos(10%, 0, none, none);
+    @include pattern(flex, 90%, 100%, #ebd294);
     @include text();
+    flex-direction: column;
 }
 
 .text-field {
-    @include pattern(flex, fixed, 40%, 100%, #ebd294);
-    @include pos(10%, 0, none, none);
+    @include pattern(flex, 40%, 100%, #ebd294);
     @include text();
 }
 
 .counter-field {
-    @include pattern(flex, fixed, 10%, 100%, #ebd294);
-    @include pos(50%, 0, none, none);
+    @include pattern(flex, 10%, 100%, #ebd294);
     @include text();
 }
 
 .task-field {
-    @include pattern(flex, fixed, 40%, 100%, #ebd294);
-    @include pos(60%, 0, none, none);
+    @include pattern(flex, 40%, 100%, #ebd294);
     @include text();
 }
 
