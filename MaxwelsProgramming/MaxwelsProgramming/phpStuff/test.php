@@ -24,7 +24,6 @@
             include 'class.php';
 
             if (isset($_SESSION['user']) && isset($_SESSION['login-password'])) {
-                echo('<script>loginOut()</script>');
                 $loggedIn = $_SESSION['user'];
                 $test = 2;
                 var_dump($_SESSION['user']);
@@ -41,45 +40,51 @@
     <body>
         <div class="page">
             <ul class="side-menu" id="sideMenu">
-                <li class="login-field" id="loginField">
-                    <form class="login">
-                        <input type="text" placeholder="Username" name="user"/>
-                        <input type="password" placeholder="Password" name="login-password"/>
-                        <span class="log-buttons">
-                            <input type="submit" value="Login"/>
-                            <input type="button" value="Register" onclick="register()"/>
-                            <input type="button" value="Cancel" onclick="logout()"/>
-                            <?php
-                                $loggedIn = 0;
-                                if (isset($_GET['user']) && isset($_GET['login-password'])) {
-                                    $name = $_GET['user'];
-                                    $password = $_GET['login-password'];
+                <?php
+                    if ($loggedIn != 0) {
+                        echo('
+                                <li class="login-field" id="loginField">
+                                    <form class="login">
+                                        <input type="text" placeholder="Username" name="user"/>
+                                        <input type="password" placeholder="Password" name="login-password"/>
+                                        <span class="log-buttons">
+                                            <input type="submit" value="Login"/>
+                                            <input type="button" value="Register" onclick="register()"/>
+                                            <input type="button" value="Cancel" onclick="logout()"/>
+                                            ');
+                                                if (isset($_GET['user']) && isset($_GET['login-password'])) {
+                                                    $name = $_GET['user'];
+                                                    $password = $_GET['login-password'];
 
-                                    for ($i = 0; $i < count($allUsers); $i++) {
-                                        $id = $allUsers[$i]->getId();
-                                        $user = $allUsers[$i]->getUsername();
-                                        $email = $allUsers[$i]->getEmail();
-                                        $password2 = $allUsers[$i]->getPassword();
+                                                    for ($i = 0; $i < count($allUsers); $i++) {
+                                                        $id = $allUsers[$i]->getId();
+                                                        $user = $allUsers[$i]->getUsername();
+                                                        $email = $allUsers[$i]->getEmail();
+                                                        $password2 = $allUsers[$i]->getPassword();
 
-                                        if ($name == $user && $password == $password2) {
-                                            echo('<script>loginOut()</script>');
-                                            $loggedIn = $id;
-                                            $test = 2;
-                                        }
-                                    }
+                                                        if ($name == $user && $password == $password2) {
+                                                            echo('<script>loginOut()</script>');
+                                                            $loggedIn = $id;
+                                                            $test = 2;
+                                                        }
+                                                    }
 
-                                    if ($test == 2 ) {
-                                        $_SESSION['user'] = $loggedIn;
-                                        $_SESSION['login-password'] = $password;
-                                    } else {
-                                        echo('<script/>logout()</script>');
-                                        http_response_code(400);
-                                    }
-                                }
-                            ?>
-                        </span>
-                    </form>
-                </li>
+                                                    if ($test == 2 ) {
+                                                        $_SESSION['user'] = $loggedIn;
+                                                        $_SESSION['login-password'] = $password;
+                                                    } else {
+                                                        echo('<script/> allert("Test")
+                                                        logout()</script>');
+                                                        http_response_code(400);
+                                                    }
+                                                }
+                                            echo("
+                                        </span>
+                                    </form>
+                                </li>
+                        ");
+                    }
+                ?>
                 <li>
                     <a onclick="showLogin()" id="showLoginButton">
                         Login

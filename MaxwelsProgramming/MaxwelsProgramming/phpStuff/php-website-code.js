@@ -48,6 +48,12 @@ function showLogin() {
 
 function logout() {
     self.location = "http://localhost/test.php";
+    fetch("http://localhost/logout.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        }
+    });
 }
 
 function loginOut() {
@@ -116,7 +122,7 @@ function showColorPicker() {
 }
 
 function setBusy(username) {
-    fetch("http://localhost/htmlProject/phpStuff/setBusy.php?user="+username, {
+    fetch("http://localhost/setBusy.php?user="+username, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -128,7 +134,7 @@ function setBusy(username) {
 }
 
 function setAvailable(username) {
-    fetch("http://localhost/htmlProject/phpStuff/setAvailable.php?user="+username, {
+    fetch("http://localhost/setAvailable.php?user="+username, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -225,7 +231,7 @@ function submitColorChange() {
 }
 
 function search(user, seek) {
-    fetch("http://localhost/htmlProject/phpStuff/search.php?user="+user+"&search="+seek, {
+    fetch("http://localhost/search.php?user="+user+"&search="+seek, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
