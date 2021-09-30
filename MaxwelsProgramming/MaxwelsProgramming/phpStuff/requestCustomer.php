@@ -48,13 +48,13 @@
                                     $username = $allProgrammers[$i]->getUsername();
                                     $uid = $allProgrammers[$i]->getId();
 
-                                    if($uid != $_SESSION['user']) {
+                                    if($uid != $_SESSION['id']) {
                                         if ($status == "AVAILABLE") {
                                         echo ("<li> <a href='mailto:$mail' id='you' class='programmer-icon' style='background-color: #00ff00; color:black;'> $username is $status </a></li>");
                                         }
 
                                         if ($status == "BUSY") {
-                                            echo ("<li> <a id='you' class='programmer-icon' style='background-color: #ff0000'> $username is $status </a></li>");
+                                            echo ("<li> <a id='you' class='programmer-icon' style='background-color: #ff0000; color:black;'> $username is $status </a></li>");
                                         }
                                     }
                                 }
@@ -156,13 +156,13 @@
                             $requestedOn = $allRequests[$i]->getRequestedOn();
                             $deadline = $allRequests[$i]->getDeadline();
                             $status = $allRequests[$i]->getStatus();
-                            if ($status != "DONE" && $requestedBy == $_SESSION['user'] ) {
+                            if ($status != "DONE" && $requestedBy == $_SESSION['id'] ) {
 
                                 for ($i=0; $i < count($allProgrammers); $i++) { 
-                                if ($allProgrammers[$i]->getPid()) {
-                                    $programmer = $allProgrammers[$i]->getUsername();
+                                    if ($allProgrammers[$i]->getPid() == $workingOn) {
+                                        $programmer = $allProgrammers[$i]->getUsername();
+                                    }
                                 }
-                            }
                                 echo("
                                     <tr>
                                         <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $programmer </a> </td>
@@ -214,7 +214,7 @@
                                 }
                             }
 
-                            if ($status == "DONE" && $requestedBy == $_SESSION['user'] ) {
+                            if ($status == "DONE" && $requestedBy == $_SESSION['id'] ) {
                                 echo("
                                     <tr>
                                         <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $programmer </a> </td>
@@ -252,9 +252,10 @@
                                 <label class='radio-label' for='Other'>Other</label><br>
                                 <input type='submit' value='Create Request'/> 
                             ");
-                                if (isset($_GET['type']) && isset($_GET['topic']) && isset($_SESSION['user'])) {
+                                if (isset($_GET['type']) && isset($_GET['topic']) && isset($_SESSION['id'])) {
                                     $type = $_GET['type'];
                                     $topic = $_GET['topic'];
+                                    $user = $_SESSION['id'];
                                     $sqlCreateRequest = "INSERT INTO `requests`(`Requested_by`, `Topic`, `Type`) VALUES ('$user', '$type', '$topic')";
                                     $conn->query($sqlCreateRequest) or die($conn-> error);
                                     echo ("<script> self.location = 'http://localhost/requestCustomer.php' </script>");

@@ -55,9 +55,10 @@
         }
 
         public function getLogin() {
-            $user = $this->getId();
+            $id = $this->getId();
+            $user = $this->getUsername();
             $pass = $this->getPassword();
-            $login = array ("name" => $user, "password" => $pass);
+            $login = array ("id"=> $id, "name" => $user, "password" => $pass);
             return $login;
         }
     }
@@ -233,7 +234,7 @@
         array_push($allUsers,$newUser);
     }
 
-    $sqlGetAllProgrammers = $conn->query("SELECT * FROM `programmer` INNER JOIN `user` ON `programmer`.`P_ID`=`user`.`ID`");
+    $sqlGetAllProgrammers = $conn->query("SELECT * FROM `programmer` INNER JOIN `user` ON `programmer`.`P_ID`=`user`.`ID` ORDER BY `programmer`.`Status`");
     $allProgrammers = array();
     while ($row = $sqlGetAllProgrammers -> fetch_assoc()) {
         $newProgrammer = new Programmer($row["P_ID"], $row["First_Name"], $row["Last_Name"], $row["Done_Request"], $row["Status"], $row["ID"], $row["Username"], $row["Email"], $row["Password"], $row["is"], $row["Date of creation"]);

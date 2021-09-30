@@ -33,13 +33,14 @@
                 }
             }
 
-            if (isset($_SESSION['user']) && isset($_SESSION['login-password'])) {
+            if (isset($_SESSION['user']) && isset($_SESSION['login-password']) && isset($_SESSION['id'])) {
                 for ($i = 0; $i < count($allUsers); $i++) {
                     $login = $allUsers[$i]->getLogin();
                     for ($i = 0; $i < count($allUsers); $i++) {
-                        $id = $allUsers[$i]->getId();
+                        $user = $allUsers[$i]->getUsername();
                         $password = $allUsers[$i]->getPassword();
-                        if ($login["name"] == $id && $login["password"] == $password) {
+
+                        if ($login["name"] == $user && $login["password"] == $password) {
                             $loggedIn = true;
                         }
                     }
@@ -75,8 +76,9 @@
                                                     $password = $_GET['login-password'];
                                                     for ($i=0; $i < count($allUsers); $i++) { 
                                                         if ($user == $allUsers[$i]->getUsername() && $password == $allUsers[$i]->getPassword()) {
-                                                            $_SESSION['user'] = $allUsers[$i]->getId();
+                                                            $_SESSION['user'] = $allUsers[$i]->getUsername();
                                                             $_SESSION['login-password'] = $password;
+                                                            $_SESSION['id'] = $allUsers[$i]->getId();
                                                             $loggedIn = true;
                                                             echo('<script>logout(1)</script>');
                                                         }
@@ -101,7 +103,7 @@
                 </li>
                 <?php
                     if ($loggedIn === true ) {
-                        $currentUser = $_SESSION['user'];
+                        $currentUser = $_SESSION['id'];
                         echo('<script>test()</script>');
 
                         $sqlTestIs = "SELECT `is` from `user` WHERE `ID` = '$currentUser';";
