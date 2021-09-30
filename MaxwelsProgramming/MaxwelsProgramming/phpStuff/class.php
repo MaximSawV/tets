@@ -53,6 +53,13 @@
         public function getDateOfCreation() {
             return $this->dateOfCreation;
         }
+
+        public function getLogin() {
+            $user = $this->getId();
+            $pass = $this->getPassword();
+            $login = array ("name" => $user, "password" => $pass);
+            return $login;
+        }
     }
 
 
@@ -250,4 +257,6 @@
     function test($q) {
         echo($q);
     }
+
+
 ?>

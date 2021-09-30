@@ -1,4 +1,7 @@
 <?php
+    session_start();
+?>
+<?php
     $servername = "db";
     $username = "maxim";
     $password = "maxim_password";

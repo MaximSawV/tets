@@ -46,14 +46,15 @@ function showLogin() {
     document.getElementById("showLoginButton").style.display ="none";
 }
 
-function logout() {
-    self.location = "http://localhost/test.php";
-    fetch("http://localhost/logout.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        }
-    });
+function logout(x) {
+    self.location = "http://localhost/test.php?logged=no";
+    if (x == 1) {
+        self.location = "http://localhost/test.php?logged=yes";
+    }
+
+    if (x == 2) {
+        self.location = "http://localhost/test.php";
+    }
 }
 
 function loginOut() {

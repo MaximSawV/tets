@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <html>
     <head>
         <?php
@@ -38,26 +41,21 @@
                         </a>
                         <ul>
                             <?php
-                                $user = $_GET['user'];
                                 for ($i = 0; $i < (count($allProgrammers)); $i++) {
                                     $pid = $allProgrammers[$i]->getPid();
-                                    $name = $allProgrammers[$i]->getFirstName();
                                     $status = $allProgrammers[$i]->getStatus();
                                     $mail = $allProgrammers[$i]->getEmail();
                                     $username = $allProgrammers[$i]->getUsername();
                                     $uid = $allProgrammers[$i]->getId();
 
-                                    if($uid != $_GET['user']) {
+                                    if($uid != $_SESSION['user']) {
                                         if ($status == "AVAILABLE") {
-                                        echo ("<li> <a href='mailto:$mail' id='you' class='programmer-icon' style='background-color: #00ff00'> $name is $status </a></li>");
+                                        echo ("<li> <a href='mailto:$mail' id='you' class='programmer-icon' style='background-color: #00ff00; color:black;'> $username is $status </a></li>");
                                         }
 
                                         if ($status == "BUSY") {
-                                            echo ("<li> <a id='you' class='programmer-icon' style='background-color: #ff0000'> $name is $status </a></li>");
+                                            echo ("<li> <a id='you' class='programmer-icon' style='background-color: #ff0000'> $username is $status </a></li>");
                                         }
-                                    } else {
-                                        global $userstatus;
-                                        $userstatus = $status;
                                     }
                                 }
                             ?>
@@ -149,10 +147,16 @@
                             $requestedOn = $allRequests[$i]->getRequestedOn();
                             $deadline = $allRequests[$i]->getDeadline();
                             $status = $allRequests[$i]->getStatus();
-                            if ($status != "DONE" && $requestedBy == $_GET['user'] ) {
+                            if ($status != "DONE" && $requestedBy == $_SESSION['user'] ) {
+
+                                for ($i=0; $i < count($allProgrammers); $i++) { 
+                                if ($allProgrammers[$i]->getPid()) {
+                                    $programmer = $allProgrammers[$i]->getUsername();
+                                }
+                            }
                                 echo("
                                     <tr>
-                                        <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $workingOn </a> </td>
+                                        <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $programmer </a> </td>
                                         <td> $topic </td>
                                         <td> $type </td>
                                         <td> $requestedOn </td>
@@ -195,10 +199,16 @@
                             $deadline = $allRequests[$i]->getDeadline();
                             $status = $allRequests[$i]->getStatus();
 
-                            if ($status == "DONE" && $requestedBy == $_GET['user'] ) {
+                            for ($i=0; $i < count($allProgrammers); $i++) { 
+                                if ($allProgrammers[$i]->getPid()) {
+                                    $programmer = $allUsers[$i]->getUsername();
+                                }
+                            }
+
+                            if ($status == "DONE" && $requestedBy == $_SESSION['user'] ) {
                                 echo("
                                     <tr>
-                                        <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $workingOn </a> </td>
+                                        <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $programmer </a> </td>
                                         <td> $topic </td>
                                         <td> $type </td>
                                         <td> $requestedOn </td>
@@ -218,9 +228,7 @@
                     <div class="createRequestBG">
                         <form class="createRequest">
                             <?php
-                                $user = $_GET['user'];
                                 echo("
-                                <input type='hidden' value= $user name='user'/>
                                 <label for='topic'> What is it about </label><br>
                                 <input type='text' id='topic' name='topic'/><br>
                                 <input type='radio' id='website' name='type' value='Website'/>
@@ -235,13 +243,12 @@
                                 <label class='radio-label' for='Other'>Other</label><br>
                                 <input type='submit' value='Create Request'/> 
                             ");
-                                if (isset($_GET['type']) && isset($_GET['topic']) && isset($_GET['user'])) {
-                                    $user = $_GET['user'];
+                                if (isset($_GET['type']) && isset($_GET['topic']) && isset($_SESSION['user'])) {
                                     $type = $_GET['type'];
                                     $topic = $_GET['topic'];
                                     $sqlCreateRequest = "INSERT INTO `requests`(`Requested_by`, `Topic`, `Type`) VALUES ('$user', '$type', '$topic')";
                                     $conn->query($sqlCreateRequest) or die($conn-> error);
-                                    echo ("<script> self.location = 'http://localhost/htmlProject/phpStuff/requestCustomer.php?user=$user' </script>");
+                                    echo ("<script> self.location = 'http://localhost/requestCustomer.php' </script>");
                                 }
                             ?>
                         </form>

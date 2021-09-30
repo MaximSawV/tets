@@ -16,34 +16,49 @@
             if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
             }
-            $test = 0;
-            $loggedIn = 0;
+            $loggedIn = false;
             $version = rand(0,999999999) * rand(0,999999999);
-            echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>");
+            echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>
+                    <script src='php-website-code.js'></script>
+            ");
 
             include 'class.php';
+            
+            if (isset($_GET['logged'])) {
+                if ($_GET['logged'] == "no") {
+                    session_unset();
+                    session_destroy();
+                    echo('<script>logout(2)</script>');
+
+                }
+            }
 
             if (isset($_SESSION['user']) && isset($_SESSION['login-password'])) {
-                $loggedIn = $_SESSION['user'];
-                $test = 2;
-                var_dump($_SESSION['user']);
+                for ($i = 0; $i < count($allUsers); $i++) {
+                    $login = $allUsers[$i]->getLogin();
+                    for ($i = 0; $i < count($allUsers); $i++) {
+                        $id = $allUsers[$i]->getId();
+                        $password = $allUsers[$i]->getPassword();
+                        if ($login["name"] == $id && $login["password"] == $password) {
+                            $loggedIn = true;
+                        }
+                    }
+                }
             }
         ?>
         <title>
             Maxwels
         </title>
         <link rel="shortcut icon" type="x-icon" href="logo_small_icon_only.png"/>
-        <script src="php-website-code.js">
-        </script>
         <meta charset="utf-8"/>
     </head>
     <body>
         <div class="page">
             <ul class="side-menu" id="sideMenu">
                 <?php
-                    if ($loggedIn != 0) {
+                    if ($loggedIn === false) {
                         echo('
-                                <li class="login-field" id="loginField">
+                                <li class="login-field" id="loginField" style="display: none;">
                                     <form class="login">
                                         <input type="text" placeholder="Username" name="user"/>
                                         <input type="password" placeholder="Password" name="login-password"/>
@@ -53,29 +68,20 @@
                                             <input type="button" value="Cancel" onclick="logout()"/>
                                             ');
                                                 if (isset($_GET['user']) && isset($_GET['login-password'])) {
-                                                    $name = $_GET['user'];
+                                                    $user = $_GET['user'];
                                                     $password = $_GET['login-password'];
-
-                                                    for ($i = 0; $i < count($allUsers); $i++) {
-                                                        $id = $allUsers[$i]->getId();
-                                                        $user = $allUsers[$i]->getUsername();
-                                                        $email = $allUsers[$i]->getEmail();
-                                                        $password2 = $allUsers[$i]->getPassword();
-
-                                                        if ($name == $user && $password == $password2) {
-                                                            echo('<script>loginOut()</script>');
-                                                            $loggedIn = $id;
-                                                            $test = 2;
+                                                    for ($i=0; $i < count($allUsers); $i++) { 
+                                                        if ($user == $allUsers[$i]->getUsername() && $password == $allUsers[$i]->getPassword()) {
+                                                            $_SESSION['user'] = $allUsers[$i]->getId();
+                                                            $_SESSION['login-password'] = $password;
+                                                            $loggedIn = true;
+                                                            echo('<script>logout(1)</script>');
                                                         }
                                                     }
 
-                                                    if ($test == 2 ) {
-                                                        $_SESSION['user'] = $loggedIn;
-                                                        $_SESSION['login-password'] = $password;
-                                                    } else {
-                                                        echo('<script/> allert("Test")
-                                                        logout()</script>');
-                                                        http_response_code(400);
+                                                    if ($loggedIn === false) {
+                                                        session_unset();
+                                                        echo('<script>logout(0)</script>');
                                                     }
                                                 }
                                             echo("
@@ -91,20 +97,19 @@
                     </a>
                 </li>
                 <?php
-                    if ($test == 2 ) {
-                        var_dump($_SESSION['user']);
-                        var_dump($loggedIn);
+                    if ($loggedIn === true ) {
+                        $currentUser = $_SESSION['user'];
                         echo('<script>test()</script>');
 
-                        $sqlTestIs = "SELECT `is` from `user` WHERE `ID` = '$loggedIn';";
+                        $sqlTestIs = "SELECT `is` from `user` WHERE `ID` = '$currentUser';";
                         $TestIs = $conn->query($sqlTestIs);
                         while($row = mysqli_fetch_assoc($TestIs)) {
                             if($row["is"] == "Programmer" || $row["is"] == "Master") {
-                                echo ("<li> <a href='http://localhost/htmlProject/phpStuff/requestProgrammer.php' target='_blank' id='request'> Requests </a> </li>");
+                                echo ("<li> <a href='http://localhost/requestProgrammer.php' target='_blank' id='request'> Requests </a> </li>");
                             }
 
                             if($row["is"] == "Customer") {
-                                echo("<il> <a href='http://localhost/htmlProject/phpStuff/requestCustomer.php' target='_blank' id='request'> Requests </a> </li>");
+                                echo("<il> <a href='http://localhost/requestCustomer.php' target='_blank' id='request'> Requests </a> </li>");
                             }
                         }
                         echo('<li><a onclick="logout()"> Logout </a></li>');
