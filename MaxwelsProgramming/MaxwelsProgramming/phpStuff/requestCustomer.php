@@ -89,9 +89,18 @@
                         </ul>
                     </li>
                     <li>
-                        <form class="search-field">
-                            <input class="type-field" type="text" name="search" placeholder="Name/Mail/ID..."/>
-                            <input class="search-button" type="submit" value="🔎" onclick="search($_GET['user'], $_GET['search'])"/>
+                        <form class="search-field" method="post">
+                            <input class="type-field" type="test" list ="suggestions"name="search"/>
+                            <datalist id="suggestions" name="search">
+                            <?php
+                                for ($i=0; $i < count($allProgrammers) ; $i++) { 
+                                    $mail = $allProgrammers[$i]->getEmail();
+                                    $name = $allProgrammers[$i]->getUsername();
+                                    echo("<option value='$name | $mail'>");
+                                }
+                            ?>
+                            </datalist>
+                            <input class="search-button" type="submit" value="🔎" onclick="search($_GET['search'])"/>
                         </form>
 
                     </li>

@@ -336,6 +336,18 @@ a {
     }
 }
 
+.easter-egg {
+    position: fixed;
+    width: 44px;
+    height: 44px;
+    background-color: transparent;
+    z-index: 10;
+    left: 46.6%;
+    top: 9.4%;
+    color: transparent;
+    border-radius: 50%;
+}
+
 //Request Page-----------------------------------------------------------------------------------------------
 @mixin menu-bar ($direction, $top, $left, $width, $height) {
     position: fixed;

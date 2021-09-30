@@ -2,6 +2,11 @@
 
 let to;
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+
 function openSideMenu() {
     var elem = document.getElementById("sideMenu");
     var pos = -200;
@@ -218,6 +223,28 @@ function changeColor(id) {
         document.getElementById(select).style.backgroundColor = hexNumber;
         color2 = hexNumber;
         return color2;
+    }
+}
+
+let eg = 0;
+
+function eegg(id) {
+    eg+=1;
+    let egg = document.getElementById(id);
+    console.log(eg);
+    if(eg >= 5) {
+        egg.style.backgroundColor = "wheat"
+    } 
+    if(eg >= 10) {
+        console.log("oh no, you broke it!");
+        egg.style.backgroundColor = "transparent"
+    }
+
+    if(eg >= 6) {
+        let x = getRandomInt(window.innerWidth - 44)
+        let y = getRandomInt(window.innerHeight - 44)
+        egg.style.left = x +"px";
+        egg.style.top = y +"px";
     }
 }
 

@@ -53,6 +53,9 @@
         <meta charset="utf-8"/>
     </head>
     <body>
+        <div class="easter-egg" id="eegg" onclick="eegg('eegg')">
+            .
+        </div>
         <div class="page">
             <ul class="side-menu" id="sideMenu">
                 <?php
