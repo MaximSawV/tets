@@ -259,7 +259,6 @@
                     <p> maxwels-programming@gmail.com </p>
                     <p> Tel: 2365/424523542625 </p>
                 </div>
-                
             </div>
         </div>
     </body>

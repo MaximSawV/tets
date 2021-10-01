@@ -50,11 +50,11 @@
                                     $uid = $programmer->getId();
                                     if($uid != $_SESSION['id']) {
                                         if ($status == "AVAILABLE") {
-                                        echo ("<li> <a href='mailto:$mail' id='you' class='programmer-icon' style='background-color: #00ff00; color: black;'> $name is $status </a></li>");
+                                        echo ("<li> <a href='mailto:$mail' id='you' class='programmer-icon' style='background-color: #00ff00; color: black;'> $username is $status </a></li>");
                                         }
 
                                         if ($status == "BUSY") {
-                                            echo ("<li> <a id='you' class='programmer-icon' style='background-color: #ff0000; color: black;'> $name is $status </a></li>");
+                                            echo ("<li> <a id='you' class='programmer-icon' style='background-color: #ff0000; color: black;'> $username is $status </a></li>");
                                         }
                                     }
                                 }

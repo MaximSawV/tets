@@ -267,6 +267,10 @@ function search(user, seek) {
     });
 }
 
+function editRequest(rId) {
+    
+}
+
 //Animations________________________________________________________________________________________________________________________________________________
 function newsBlockOpen(id) {
     const element = (document.getElementById(id));
@@ -347,4 +351,3 @@ function newsBlockClose(id) {
         }
     }
 }
-

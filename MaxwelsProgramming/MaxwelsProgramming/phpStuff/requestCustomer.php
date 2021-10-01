@@ -132,7 +132,7 @@
                 </ul>
             </div>
             <div class="main-screen">
-                <div class="all-requests" id="allRequests">
+                <div class="all-requests" id="allRequests" style="display: flex">
                     <?php
                         echo( "
                             <table class='request-table' id='request-table'>
@@ -148,6 +148,7 @@
                                 </thead>
                                 <tbody>
                         ");
+                        $iconSpaceTop = 300;
                         foreach ($allRequests as $request) {
                             $rid = $request->getRid();
                             $requestedBy = $request->getRequestedBy();
@@ -168,6 +169,7 @@
                                         $pName = "None";
                                     }
                                 }
+                                $iconSpaceTop += 100;
                                 echo("
                                     <tr>
                                         <td class='requester'> <a style='width=100%; height=100%; color: white;' href=mailto:''> $pName </a> </td>
@@ -176,8 +178,14 @@
                                         <td> $requestedOn </td>
                                         <td> $deadline </td>
                                         <td> $status </td>
-                                    </tr>"
-                                );
+                                        <td>
+                                            <div class='edit-icon' id='editIcon'>
+                                                <image class='icon-img' src='edit_icon.png' onclick='editRequest($rid)'/>
+                                                <image class='icon-img' src='delete-icon.png' onclick='deleteRequest($rid)'/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ");
                             }
                         }
                         echo("
@@ -222,7 +230,7 @@
                             if ($status == "DONE" && $requestedBy == $_SESSION['id'] ) {
                                 echo("
                                     <tr>
-                                        <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $pName </a> </td>
+                                        <td id='' class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $pName </a> </td>
                                         <td> $topic </td>
                                         <td> $type </td>
                                         <td> $requestedOn </td>

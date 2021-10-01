@@ -415,7 +415,7 @@ a {
   overflow: auto; }
 
 .request-table {
-  margin-top: 100px;
+  margin-top: 150px;
   width: 80%;
   border: #85cbff solid 5px;
   background: #0c2436;
@@ -530,5 +530,18 @@ a {
 .color-field {
   height: 200px;
   width: 300px; }
+
+.edit-icon {
+  position: fixed;
+  width: fit-content;
+  height: fit-content;
+  margin-top: -25;
+  margin-left: 15; }
+
+.icon-img {
+  position: relative;
+  max-height: 50px; }
+  .icon-img:hover {
+    background: lightskyblue; }
 
 /*# sourceMappingURL=phpstyle.css.map */
