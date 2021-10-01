@@ -1,4 +1,6 @@
 <?php
+    ini_set('session.gc_maxlifetime', 86400);
+    session_set_cookie_params(86400);
     session_start();
 ?>
 <html>
@@ -54,6 +56,16 @@
         <meta charset="utf-8"/>
     </head>
     <body>
+        <?php
+            if(isset($_SESSION['user'])) {
+                $user = $_SESSION['user'];
+                echo("
+                <div class='spacer'>
+                    <p> Welcome $user </p>
+                </div>
+                ");
+            }
+        ?>
         <div class="easter-egg" id="eegg" onclick="eegg('eegg')">
             .
         </div>
@@ -63,7 +75,7 @@
                     if ($loggedIn === false) {
                         echo('
                                 <li class="login-field" id="loginField" style="display: none;">
-                                    <form class="login">
+                                    <form class="login" method:post;>
                                         <input type="text" placeholder="Username" name="user"/>
                                         <input type="password" placeholder="Password" name="login-password"/>
                                         <span class="log-buttons">
@@ -80,7 +92,7 @@
                                                             $_SESSION['login-password'] = $password;
                                                             $_SESSION['id'] = $allUsers[$i]->getId();
                                                             $loggedIn = true;
-                                                            echo('<script>logout(1)</script>');
+                                                            echo('<script> reload() </script>');
                                                         }
                                                     }
 

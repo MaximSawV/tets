@@ -15,6 +15,6 @@
     die("Connection failed: " . $conn->connect_error);
     }
 
-    $user = $_GET['user'];
-    $setFree = $conn->query("UPDATE programmer p INNER JOIN user u ON u.ID = p.P_ID SET p.Status = 'AVAILABLE' WHERE u.Username = '$user'") or die($conn->error);
+    $user = $_SESSION['id'];
+    $setFree = $conn->query("UPDATE programmer p INNER JOIN user u ON u.ID = p.P_ID SET p.Status = 'AVAILABLE' WHERE u.ID = '$user'") or die($conn->error);
 ?>

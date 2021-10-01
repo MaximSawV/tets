@@ -41,25 +41,21 @@
                         </a>
                         <ul id="programmer-chart">
                              <?php
-                                $user = $_GET['user'];
-                                for ($i = 0; $i < (count($allProgrammers)); $i++) {
-                                    $pid = $allProgrammers[$i]->getPid();
-                                    $name = $allProgrammers[$i]->getFirstName();
-                                    $status = $allProgrammers[$i]->getStatus();
-                                    $mail = $allProgrammers[$i]->getEmail();
-                                    $username = $allProgrammers[$i]->getUsername();
-                                    $uid = $allProgrammers[$i]->getId();
-                                    if($uid != $_GET['user']) {
+                                foreach ($allProgrammers as $programmer) {
+                                    $pid = $programmer->getPid();
+                                    $name = $programmer->getFirstName();
+                                    $status = $programmer->getStatus();
+                                    $mail = $programmer->getEmail();
+                                    $username = $programmer->getUsername();
+                                    $uid = $programmer->getId();
+                                    if($uid != $_SESSION['id']) {
                                         if ($status == "AVAILABLE") {
-                                        echo ("<li> <a href='mailto:$mail' id='you' class='programmer-icon' style='background-color: #00ff00'> $name is $status </a></li>");
+                                        echo ("<li> <a href='mailto:$mail' id='you' class='programmer-icon' style='background-color: #00ff00; color: black;'> $name is $status </a></li>");
                                         }
 
                                         if ($status == "BUSY") {
-                                            echo ("<li> <a id='you' class='programmer-icon' style='background-color: #ff0000'> $name is $status </a></li>");
+                                            echo ("<li> <a id='you' class='programmer-icon' style='background-color: #ff0000; color: black;'> $name is $status </a></li>");
                                         }
-                                    } else {
-                                        global $userstatus;
-                                        $userstatus = $status;
                                     }
                                 }
                             ?>
@@ -93,9 +89,18 @@
                         </ul>
                     </li>
                     <li>
-                        <form class="search-field">
-                            <input class="type-field" type="text" placeholder="Name/Mail/ID..."/>
-                            <input class="search-button" type="submit" value="🔎"/>
+                        <form class="search-field" method="post">
+                            <input class="type-field" type="test" list ="suggestions"name="search"/>
+                            <datalist id="suggestions" name="search">
+                            <?php
+                                foreach ($allProgrammers as $programmer) { 
+                                    $mail = $programmer->getEmail();
+                                    $name = $programmer->getUsername();
+                                    echo("<option value='$name | $mail'>");
+                                }
+                            ?>
+                            </datalist>
+                            <input class="search-button" type="submit" value="🔎" onclick="search($_GET['search'])"/>
                         </form>
                     </li>
                     <li class="help">
@@ -104,13 +109,12 @@
                         </a>
                     </li>
                     <?php
-                        $user = $_GET['user'];
                         echo("
                     <li style='width: 40%;'>
-                        <a id='busy' class='list-face' onclick='setBusy(`$user`)' style='color: #ff0000; display: flex;'>
+                        <a id='busy' class='list-face' onclick='setBusy()' style='color: #ff0000; display: flex;'>
                             BUSY
                         </a>
-                        <a id='available' class='list-face' onclick='setAvailable(`$user`)' style='color: #00ff00; display: flex;'>
+                        <a id='available' class='list-face' onclick='setAvailable()' style='color: #00ff00; display: flex;'>
                             AVAILABLE
                         </a>
                     </li>
@@ -160,20 +164,26 @@
                                 <tbody>
                         ");
 
-                        for ($i = 0; $i < count($allRequests); $i++) {
-                            $rid = $allRequests[$i]->getRid();
-                            $requestedBy = $allRequests[$i]->getRequestedBy();
-                            $workingOn = $allRequests[$i]->getWorkingOn();
-                            $topic = $allRequests[$i]->getTopic();
-                            $type = $allRequests[$i]->getType();
-                            $requestedOn = $allRequests[$i]->getRequestedOn();
-                            $deadline = $allRequests[$i]->getDeadline();
-                            $status = $allRequests[$i]->getStatus();
+                        foreach ($allRequests as $request) {
+                            $rid = $request->getRid();
+                            $requestedBy = $request->getRequestedBy();
+                            $workingOn = $request->getWorkingOn();
+                            $topic = $request->getTopic();
+                            $type = $request->getType();
+                            $requestedOn = $request->getRequestedOn();
+                            $deadline = $request->getDeadline();
+                            $status = $request->getStatus();
 
-                            if ($status == "REQUESTED") {
+                            foreach ($allUsers as $user) {
+                                if ($requestedBy == $user->getId()) {
+                                    $uName = $user->getUsername();
+                                }
+                            }
+
+                            if ($status == "REQUESTED" && $workingOn == null) {
                                 echo("
                                     <tr>
-                                        <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $requestedBy </a> </td>
+                                        <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $uName </a> </td>
                                         <td> $topic </td>
                                         <td> $type </td>
                                         <td> $requestedOn </td>
@@ -189,7 +199,6 @@
                         ");
                     ?>
                 </div>
-                <!--------------------------------------------------------------------------------------->
                 <div class="all-requests" id="myRequests">
                     <?php
 
@@ -208,23 +217,29 @@
                                 <tbody>
                         ");
 
-                        for ($i = 0; $i < count($allProgrammers); $i++) {
-                            if ($allProgrammers[$i]->getUsername() == $_GET['user']);{
-                                for ($i2 = 0; $i2 < count($allRequests); $i2++) {
-                                    $rid = $allRequests[$i2]->getRid();
-                                    $requestedBy = $allRequests[$i2]->getRequestedBy();
-                                    $workingOn = $allRequests[$i2]->getWorkingOn();
-                                    $topic = $allRequests[$i2]->getTopic();
-                                    $type = $allRequests[$i2]->getType();
-                                    $requestedOn = $allRequests[$i2]->getRequestedOn();
-                                    $deadline = $allRequests[$i2]->getDeadline();
-                                    $status = $allRequests[$i2]->getStatus();
+                        foreach ($allProgrammers as $programmer) {
+                            if ($programmer->getId() == $_SESSION['id']);{
+                                foreach ($allRequests as $request) {
+                                    $rid = $request->getRid();
+                                    $requestedBy = $request->getRequestedBy();
+                                    $workingOn = $request->getWorkingOn();
+                                    $topic = $request->getTopic();
+                                    $type = $request->getType();
+                                    $requestedOn = $request->getRequestedOn();
+                                    $deadline = $request->getDeadline();
+                                    $status = $request->getStatus();
 
-                                    if ($status == "IN PROGRESS" && $workingOn == $_GET['user']) {
+                                    foreach ($allUsers as $user) {
+                                        if ($requestedBy == $user->getId()) {
+                                            $uName = $user->getUsername();
+                                        }
+                                    }
+
+                                    if ($status == "IN PROGRESS" && $workingOn == $_SESSION['id']) {
                                     
                                         echo("
                                             <tr>
-                                                <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $requestedBy </a> </td>
+                                                <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $uName </a> </td>
                                                 <td> $topic </td>
                                                 <td> $type </td>
                                                 <td> $requestedOn </td>
@@ -260,24 +275,30 @@
                                 <tbody>
                         ");
 
-                        for ($i = 0; $i < count($allProgrammers); $i++) {
-                            if ($allProgrammers[$i]->getUsername() == $_GET['user']);{
-                                for ($i2 = 0; $i2 < count($allRequests); $i2++) {
-                                    $rid = $allRequests[$i2]->getRid();
-                                    $requestedBy = $allRequests[$i2]->getRequestedBy();
-                                    $workingOn = $allRequests[$i2]->getWorkingOn();
-                                    $topic = $allRequests[$i2]->getTopic();
-                                    $type = $allRequests[$i2]->getType();
-                                    $requestedOn = $allRequests[$i2]->getRequestedOn();
-                                    $deadline = $allRequests[$i2]->getDeadline();
-                                    $status = $allRequests[$i2]->getStatus();
-                                    $satisfaction = $allRequests[$i2]->getSatisfied();
+                        foreach ($allProgrammers as $programmer) {
+                            if ($programmer->getId() == $_SESSION['id']);{
+                                foreach ($allRequests as $request) {
+                                    $rid = $request->getRid();
+                                    $requestedBy = $request->getRequestedBy();
+                                    $workingOn = $request->getWorkingOn();
+                                    $topic = $request->getTopic();
+                                    $type = $request->getType();
+                                    $requestedOn = $request->getRequestedOn();
+                                    $deadline = $request->getDeadline();
+                                    $status = $request->getStatus();
+                                    $satisfaction = $request->getSatisfied();
 
-                                    if ($status == "DONE" && $workingOn == $_GET['user']) {
+                                    foreach ($allUsers as $user) {
+                                        if ($requestedBy == $user->getId()) {
+                                            $uName = $user->getUsername();
+                                        }
+                                    }
+
+                                    if ($status == "DONE" && $workingOn == $_SESSION['id']) {
                                     
                                         echo("
                                             <tr>
-                                                <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $requestedBy </a> </td>
+                                                <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $uName </a> </td>
                                                 <td> $topic </td>
                                                 <td> $type </td>
                                                 <td> $satisfaction </td>
@@ -326,6 +347,11 @@
                 </div>
             </div>
         <?php
+            foreach($allProgrammers as $programmer) {
+                if($programmer->getId() == $_SESSION['id']) {
+                    $userstatus = $programmer->getStatus();
+                }
+            }
             if ($userstatus == "AVAILABLE") {
                 $color = "#00ff00";
                 $cord ="2400px";

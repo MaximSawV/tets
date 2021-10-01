@@ -51,11 +51,12 @@ function showLogin() {
     document.getElementById("showLoginButton").style.display ="none";
 }
 
+function reload() {
+    self.location = "http://localhost/test.php";
+}
+
 function logout(x) {
     self.location = "http://localhost/test.php?logged=no";
-    if (x == 1) {
-        self.location = "http://localhost/test.php?logged=yes";
-    }
 
     if (x == 2) {
         self.location = "http://localhost/test.php";
@@ -127,25 +128,23 @@ function showColorPicker() {
     document.getElementById("colorPickerMenu").style.display = "flex";
 }
 
-function setBusy(username) {
-    fetch("http://localhost/setBusy.php?user="+username, {
+function setBusy() {
+    fetch("http://localhost/setBusy.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
-        body: `user=${username}`
     });
     document.getElementById("indicator").style.backgroundColor = "red";
     document.getElementById("indicator").style.left = "1971px";
 }
 
-function setAvailable(username) {
-    fetch("http://localhost/setAvailable.php?user="+username, {
+function setAvailable() {
+    fetch("http://localhost/setAvailable.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
-        body: `user=${username}`
     });
     document.getElementById("indicator").style.backgroundColor = "#00ff00";
     document.getElementById("indicator").style.left = "2400px";

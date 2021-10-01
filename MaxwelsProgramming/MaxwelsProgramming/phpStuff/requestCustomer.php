@@ -1,4 +1,6 @@
 <?php
+    ini_set('session.gc_maxlifetime', 86400);
+    session_set_cookie_params(86400);
     session_start();
 ?>
 <html>
@@ -41,12 +43,12 @@
                         </a>
                         <ul>
                             <?php
-                                for ($i = 0; $i < (count($allProgrammers)); $i++) {
-                                    $pid = $allProgrammers[$i]->getPid();
-                                    $status = $allProgrammers[$i]->getStatus();
-                                    $mail = $allProgrammers[$i]->getEmail();
-                                    $username = $allProgrammers[$i]->getUsername();
-                                    $uid = $allProgrammers[$i]->getId();
+                                foreach ($allProgrammers as $programmer) {
+                                    $pid = $programmer->getPid();
+                                    $status = $programmer->getStatus();
+                                    $mail = $programmer->getEmail();
+                                    $username = $programmer->getUsername();
+                                    $uid = $programmer->getId();
 
                                     if($uid != $_SESSION['id']) {
                                         if ($status == "AVAILABLE") {
@@ -73,7 +75,7 @@
                             </li>
                             <li>
                                 <a>
-                                    Webdesign
+                                    Design
                                 </a>
                             </li>
                             <li>
@@ -93,16 +95,15 @@
                             <input class="type-field" type="test" list ="suggestions"name="search"/>
                             <datalist id="suggestions" name="search">
                             <?php
-                                for ($i=0; $i < count($allProgrammers) ; $i++) { 
-                                    $mail = $allProgrammers[$i]->getEmail();
-                                    $name = $allProgrammers[$i]->getUsername();
+                                foreach ($allProgrammers as $programmer) { 
+                                    $mail = $programmer->getEmail();
+                                    $name = $programmer->getUsername();
                                     echo("<option value='$name | $mail'>");
                                 }
                             ?>
                             </datalist>
                             <input class="search-button" type="submit" value="🔎" onclick="search($_GET['search'])"/>
                         </form>
-
                     </li>
                     <li class="help">
                         <a href="mailto:maxwels.contacts@gmail.com" class="list-face">
@@ -147,25 +148,29 @@
                                 </thead>
                                 <tbody>
                         ");
-                        for ($i = 0; $i < count($allRequests); $i++) {
-                            $rid = $allRequests[$i]->getRid();
-                            $requestedBy = $allRequests[$i]->getRequestedBy();
-                            $workingOn = $allRequests[$i]->getWorkingOn();
-                            $topic = $allRequests[$i]->getTopic();
-                            $type = $allRequests[$i]->getType();
-                            $requestedOn = $allRequests[$i]->getRequestedOn();
-                            $deadline = $allRequests[$i]->getDeadline();
-                            $status = $allRequests[$i]->getStatus();
+                        foreach ($allRequests as $request) {
+                            $rid = $request->getRid();
+                            $requestedBy = $request->getRequestedBy();
+                            $workingOn = $request->getWorkingOn();
+                            $topic = $request->getTopic();
+                            $type = $request->getType();
+                            $requestedOn = $request->getRequestedOn();
+                            $deadline = $request->getDeadline();
+                            $status = $request->getStatus();
                             if ($status != "DONE" && $requestedBy == $_SESSION['id'] ) {
 
-                                for ($i=0; $i < count($allProgrammers); $i++) { 
-                                    if ($allProgrammers[$i]->getPid() == $workingOn) {
-                                        $programmer = $allProgrammers[$i]->getUsername();
+                                foreach ($allProgrammers as $programmer) { 
+                                    if ($programmer->getPid() == $workingOn) {
+                                        $pName = $programmer->getUsername();
+                                    }
+
+                                    if ($workingOn == NULL) {
+                                        $pName = "None";
                                     }
                                 }
                                 echo("
                                     <tr>
-                                        <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $programmer </a> </td>
+                                        <td class='requester'> <a style='width=100%; height=100%; color: white;' href=mailto:''> $pName </a> </td>
                                         <td> $topic </td>
                                         <td> $type </td>
                                         <td> $requestedOn </td>
@@ -198,26 +203,26 @@
                                 <tbody>
                         ");
 
-                        for ($i = 0; $i < count($allRequests); $i++) {
-                            $rid = $allRequests[$i]->getRid();
-                            $requestedBy = $allRequests[$i]->getRequestedBy();
-                            $workingOn = $allRequests[$i]->getWorkingOn();
-                            $topic = $allRequests[$i]->getTopic();
-                            $type = $allRequests[$i]->getType();
-                            $requestedOn = $allRequests[$i]->getRequestedOn();
-                            $deadline = $allRequests[$i]->getDeadline();
-                            $status = $allRequests[$i]->getStatus();
+                        foreach ($allRequests as $request) {
+                            $rid = $request->getRid();
+                            $requestedBy = $request->getRequestedBy();
+                            $workingOn = $request->getWorkingOn();
+                            $topic = $request->getTopic();
+                            $type = $request->getType();
+                            $requestedOn = $request->getRequestedOn();
+                            $deadline = $request->getDeadline();
+                            $status = $request->getStatus();
 
-                            for ($i=0; $i < count($allProgrammers); $i++) { 
-                                if ($allProgrammers[$i]->getPid()) {
-                                    $programmer = $allUsers[$i]->getUsername();
+                            foreach ($allProgrammers as $programmer) { 
+                                if ($programmer->getPid() == $workingOn) {
+                                    $pName = $programmer->getUsername();
                                 }
                             }
 
                             if ($status == "DONE" && $requestedBy == $_SESSION['id'] ) {
                                 echo("
                                     <tr>
-                                        <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $programmer </a> </td>
+                                        <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $pName </a> </td>
                                         <td> $topic </td>
                                         <td> $type </td>
                                         <td> $requestedOn </td>
@@ -242,21 +247,23 @@
                                 <input type='text' id='topic' name='topic'/><br>
                                 <input type='radio' id='website' name='type' value='Website'/>
                                 <label class='radio-label' for='website'> Website </label><br>
-                                <input type='radio' id='Webdesign' name='type' value='Webdesign'/>
-                                <label class='radio-label' for='Webdesign'>Webdesign</label><br>
+                                <input type='radio' id='Design' name='type' value='Design'/>
+                                <label class='radio-label' for='Design'>Design</label><br>
                                 <input type='radio' id='Game' name='type' value='Game'/>
                                 <label class='radio-label' for='Game'>Game</label><br>
                                 <input type='radio' id='Database' name='type' value='Database'/>
                                 <label class='radio-label' for='Database'>Database</label><br>
                                 <input type='radio' id='Other' name='type' value='Other'/>
                                 <label class='radio-label' for='Other'>Other</label><br>
+                                <input class= 'radio-label' type='date' id='Date' name='deadline'/><br>
                                 <input type='submit' value='Create Request'/> 
                             ");
-                                if (isset($_GET['type']) && isset($_GET['topic']) && isset($_SESSION['id'])) {
+                                if (isset($_GET['type']) && isset($_GET['topic']) && isset($_GET['deadline']) && isset($_SESSION['id'])) {
                                     $type = $_GET['type'];
                                     $topic = $_GET['topic'];
+                                    $deadline = $_GET['deadline'];
                                     $user = $_SESSION['id'];
-                                    $sqlCreateRequest = "INSERT INTO `requests`(`Requested_by`, `Topic`, `Type`) VALUES ('$user', '$type', '$topic')";
+                                    $sqlCreateRequest = "INSERT INTO `requests`(`Requested_by`, `Topic`, `Type`, `Deadline`) VALUES ('$user', '$type', '$topic', '$deadline')";
                                     $conn->query($sqlCreateRequest) or die($conn-> error);
                                     echo ("<script> self.location = 'http://localhost/requestCustomer.php' </script>");
                                 }
