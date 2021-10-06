@@ -163,7 +163,7 @@
                                 </thead>
                                 <tbody>
                         ");
-
+                        $iconSpaceTop = 300;
                         foreach ($allRequests as $request) {
                             $rid = $request->getRid();
                             $requestedBy = $request->getRequestedBy();
@@ -181,6 +181,7 @@
                             }
 
                             if ($status == "REQUESTED" && $workingOn == null) {
+                                $iconSpaceTop += 100;
                                 echo("
                                     <tr>
                                         <td class='requester'> <a style='width=100%; height=100%;' href=mailto:''> $uName </a> </td>
@@ -189,6 +190,11 @@
                                         <td> $requestedOn </td>
                                         <td> $deadline </td>
                                         <td> $status </td>
+                                        <td>
+                                            <div class='edit-icon' id='editIcon'>
+                                                <image class='icon-img' src='submitbutton.png' onclick='takeRequest($rid)'/>
+                                            </div>
+                                        </td>
                                     </tr>"
                                 );
                             }

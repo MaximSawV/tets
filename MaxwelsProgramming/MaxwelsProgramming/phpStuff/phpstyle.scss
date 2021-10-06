@@ -690,9 +690,10 @@ a {
 .icon-img {
     position: relative;
     max-height: 50px;
+    transition: 0.25s;
 
     &:hover {
-        background: lightskyblue;
+        max-height: 70px;
     }
 }
 

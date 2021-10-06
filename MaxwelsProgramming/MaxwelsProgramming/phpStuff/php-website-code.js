@@ -274,7 +274,6 @@ function editRequest(rId) {
 
 function setRequestDate(rId) {
     let newDate = document.getElementById("newDeadline").value;
-    console.log(newDate);
     fetch("http://localhost/edit_request.php?method=edit&request="+rId+"&newDate="+newDate, {
         method: "POST",
         headers: {
@@ -288,7 +287,6 @@ function setRequestDate(rId) {
 }
 
 function deleteRequest(rId) {
-    console.log(3);
     fetch("http://localhost/edit_request.php?method=delete&newDate=0&request="+rId, {
         method: "POST",
         headers: {
@@ -297,6 +295,18 @@ function deleteRequest(rId) {
         body:   `request=${rId}`
     });
     self.location = "http://localhost/requestCustomer.php";
+}
+
+function takeRequest(rId) {
+    console.log(1);
+    fetch("http://localhost/take_request.php?request="+rId, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`
+    });
+    self.location = "http://localhost/requestProgrammer.php";
 }
 
 //Animations________________________________________________________________________________________________________________________________________________

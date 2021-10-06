@@ -15,7 +15,7 @@
     $rid = $_GET['request'];
     $method = $_GET['method'];
     if ($_GET['method'] == "edit") {
-        $updateDate = $conn->query("UPDATE `requests` SET `Deadline` = '$newDeadline' WHERE `requests`.`R_ID` = '$rid'") or die($conn->error);
+        $updateDate = $conn->query("UPDATE `requests` SET `Deadline` = '$newDeadline' WHERE `R_ID` = '$rid'") or die($conn->error);
     }
 
     if ($_GET['method'] == "delete") {
