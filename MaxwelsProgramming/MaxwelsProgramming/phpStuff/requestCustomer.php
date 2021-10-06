@@ -28,7 +28,7 @@
             include 'class.php';
         ?>
         <meta charset="utf-8"/>
-        <link rel="shortcut icon" type="x-icon" href="logo_small_icon_only.png"/>
+        <link rel="shortcut icon" type="x-icon" href="pictures/logo_small_icon_only.png"/>
         <title>
             Your Requests
         </title>
@@ -180,8 +180,8 @@
                                         <td> $status </td>
                                         <td>
                                             <div class='edit-icon' id='editIcon'>
-                                                <image class='icon-img' src='edit_icon.png' onclick='editRequest($rid)'/>
-                                                <image class='icon-img' src='delete-icon.png' onclick='deleteRequest($rid)'/>
+                                                <image class='icon-img' src='pictures/edit_icon.png' onclick='editRequest($rid)'/>
+                                                <image class='icon-img' src='pictures/delete-icon.png' onclick='deleteRequest($rid)'/>
                                             </div>
                                         </td>
                                     </tr>

@@ -35,6 +35,10 @@
                 }
             }
 
+            // $user = select * from user where Username = $login ["name"]
+            //  wenn $user == null => dann login geht
+            // wenn $user != null => Passwort prüfen
+
             if (isset($_SESSION['user']) && isset($_SESSION['login-password']) && isset($_SESSION['id'])) {
                 for ($i = 0; $i < count($allUsers); $i++) {
                     $login = $allUsers[$i]->getLogin();
@@ -52,7 +56,7 @@
         <title>
             Maxwels
         </title>
-        <link rel="shortcut icon" type="x-icon" href="logo_small_icon_only.png"/>
+        <link rel="shortcut icon" type="x-icon" href="pictures/logo_small_icon_only.png"/>
         <meta charset="utf-8"/>
     </head>
     <body>
@@ -155,8 +159,8 @@
             </ul>
 
             <div class="header">
-                <img id="websiteLogo" src="maxwel_cover(2).jpg" width="100%"/>
-                <img style="top: 0" class="side-menu-button2" id="smButton" onclick="openSideMenu()" src="menu.png" height="50px" width="100px"/>
+                <img id="websiteLogo" src="pictures/maxwel_cover(2).jpg" width="100%"/>
+                <img style="top: 0" class="side-menu-button2" id="smButton" onclick="openSideMenu()" src="pictures/menu.png" height="50px" width="100px"/>
             </div>
             <div class="spacer">
                 <p> Programmer you can trust! </p>
@@ -208,7 +212,7 @@
                         <div class="news-container">
                             <div class="news" id="1" onclick="newsBlockOpen(1)" onmouseleave="newsBlockClose(1)">
                                 <div class="news-panel">
-                                    <img id="10" src="logo_icon_inverted.png" height="100px" width="100px"/>
+                                    <img id="10" src="pictures/logo_icon_inverted.png" height="100px" width="100px"/>
                                     <h1> First Post </h1>
                                     <p id="11"> Text </p>
                                 </div>
@@ -216,7 +220,7 @@
 
                             <div class="news" id="2" onclick="newsBlockOpen(2)" onmouseleave="newsBlockClose(2)">
                                 <div class="news-panel">
-                                    <img id="20" src="logo_icon_inverted.png" height="100px" width="100px"/>
+                                    <img id="20" src="pictures/logo_icon_inverted.png" height="100px" width="100px"/>
                                     <h1> Second Post </h1>
                                     <p id="21"> Text </p>
                                 </div>
@@ -224,7 +228,7 @@
 
                             <div class="news" id="3" onclick="newsBlockOpen(3)" onmouseleave="newsBlockClose(3)">
                                 <div class="news-panel">
-                                    <img id="30" src="logo_icon_inverted.png" height="100px" width="100px"/>
+                                    <img id="30" src="pictures/logo_icon_inverted.png" height="100px" width="100px"/>
                                     <h1> Third Post </h1>
                                     <p id="31"> Text </p>
                                 </div>
@@ -232,7 +236,7 @@
 
                             <div class="news" id="4" onclick="newsBlockOpen(4)"onmouseleave="newsBlockClose(4)">
                                 <div class="news-panel">
-                                    <img id="40" src="logo_icon_inverted.png" height="100px" width="100px"/>
+                                    <img id="40" src="pictures/logo_icon_inverted.png" height="100px" width="100px"/>
                                     <h1> Fourth Post </h1>
                                     <p id="41"> Text </p>
                                 </div>
@@ -240,7 +244,7 @@
 
                             <div class="news" id="5" onclick="newsBlockOpen(5)" onmouseleave="newsBlockClose(5)">
                                 <div class="news-panel">
-                                    <img id="50" src="logo_icon_inverted.png" height="100px" width="100px"/>
+                                    <img id="50" src="pictures/logo_icon_inverted.png" height="100px" width="100px"/>
                                     <h1> Fifth Post </h1>
                                     <p id="51"> Text </p>
                                 </div>
@@ -253,7 +257,7 @@
                 <p> How You can contact me </p>
             </div>
             <div class="footer">
-                <img src="smaller_icon.png" width="200" height="200" />
+                <img src="pictures/smaller_icon.png" width="200" height="200" />
                 <div class="contacts" id="contacts">
                     <p> Copyright © Maxwels 2021 </p>
                     <p> maxwels-programming@gmail.com </p>

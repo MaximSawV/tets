@@ -26,7 +26,7 @@
             include 'class.php';
         ?>
         <meta charset="utf-8"/>
-        <link rel="shortcut icon" type="x-icon" href="logo_small_icon_only.png"/>
+        <link rel="shortcut icon" type="x-icon" href="pictures/logo_small_icon_only.png"/>
         <title>
             Your Requests
         </title>
@@ -192,7 +192,7 @@
                                         <td> $status </td>
                                         <td>
                                             <div class='edit-icon' id='editIcon'>
-                                                <image class='icon-img' src='submitbutton.png' onclick='takeRequest($rid)'/>
+                                                <image class='icon-img' src='pictures/submitbutton.png' onclick='takeRequest($rid)'/>
                                             </div>
                                         </td>
                                     </tr>"
@@ -251,6 +251,11 @@
                                                 <td> $requestedOn </td>
                                                 <td> $deadline </td>
                                                 <td> $status </td>
+                                                <td>
+                                                    <div class='edit-icon' id='editIcon'>
+                                                        <image class='icon-img' src='pictures/submitbutton.png' onclick='setRequestDone($rid)'/>
+                                                    </div>
+                                                </td>
                                             </tr>"
                                         );
                                     }

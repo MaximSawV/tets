@@ -129,7 +129,7 @@ function showColorPicker() {
 }
 
 function setBusy() {
-    fetch("http://localhost/setBusy.php", {
+    fetch("http://localhost/php-function/setBusy.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -140,7 +140,7 @@ function setBusy() {
 }
 
 function setAvailable() {
-    fetch("http://localhost/setAvailable.php", {
+    fetch("http://localhost/php-function/setAvailable.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -258,7 +258,7 @@ function submitColorChange() {
 }
 
 function search(user, seek) {
-    fetch("http://localhost/search.php?user="+user+"&search="+seek, {
+    fetch("http://localhost/php-function/search.php?user="+user+"&search="+seek, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -274,7 +274,7 @@ function editRequest(rId) {
 
 function setRequestDate(rId) {
     let newDate = document.getElementById("newDeadline").value;
-    fetch("http://localhost/edit_request.php?method=edit&request="+rId+"&newDate="+newDate, {
+    fetch("http://localhost/php-function/edit_request.php?method=edit&request="+rId+"&newDate="+newDate, {
         method: "POST",
         headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -287,7 +287,7 @@ function setRequestDate(rId) {
 }
 
 function deleteRequest(rId) {
-    fetch("http://localhost/edit_request.php?method=delete&newDate=0&request="+rId, {
+    fetch("http://localhost/php-function/edit_request.php?method=delete&newDate=0&request="+rId, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -298,8 +298,18 @@ function deleteRequest(rId) {
 }
 
 function takeRequest(rId) {
-    console.log(1);
-    fetch("http://localhost/take_request.php?request="+rId, {
+    fetch("http://localhost/php-function/take_request.php?request="+rId, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`
+    });
+    self.location = "http://localhost/requestProgrammer.php";
+}
+
+function setRequestDone(rId) {
+    fetch("http://localhost/php-function/done_request.php?request="+rId, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
