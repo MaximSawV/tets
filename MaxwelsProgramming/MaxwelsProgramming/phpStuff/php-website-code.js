@@ -266,9 +266,37 @@ function search(user, seek) {
         body: `search=${seek}`
     });
 }
-
+let rId;
 function editRequest(rId) {
-    
+    document.getElementById("popup").style.display = "block"
+    return rId;
+}
+
+function setRequestDate(rId) {
+    let newDate = document.getElementById("newDeadline").value;
+    console.log(newDate);
+    fetch("http://localhost/edit_request.php?method=edit&request="+rId+"&newDate="+newDate, {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`,
+        body:   `newDate=${newDate}`
+    });
+    document.getElementById("popup").style.display = "none";
+    self.location = "http://localhost/requestCustomer.php";
+}
+
+function deleteRequest(rId) {
+    console.log(3);
+    fetch("http://localhost/edit_request.php?method=delete&newDate=0&request="+rId, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`
+    });
+    self.location = "http://localhost/requestCustomer.php";
 }
 
 //Animations________________________________________________________________________________________________________________________________________________

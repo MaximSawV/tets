@@ -695,3 +695,19 @@ a {
         background: lightskyblue;
     }
 }
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 400px;
+    left: 600px;
+    width: 500px;
+    height: 500px;
+    background-color: grey;
+}
+
+.popup-button {
+    width: 100px;
+    height: 50px;
+    background: white;
+}

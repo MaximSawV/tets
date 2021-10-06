@@ -281,5 +281,9 @@
                 </div>
             </div>
         </div>
+        <div id="popup" class="popup">
+            <input type="date" id="newDeadline"/>
+            <div class="popup-button" onclick="setRequestDate()"> Submit </div>
+        </div>
     </body>
 </html>
