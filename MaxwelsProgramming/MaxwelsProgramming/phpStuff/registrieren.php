@@ -20,7 +20,7 @@
         <title>
             Registrieren
         </title>
-        <link rel="shortcut icon" type="x-icon" href="logo_small_icon_only.png"/>
+        <link rel="shortcut icon" type="x-icon" href="pictures/logo_small_icon_only.png"/>
         <script src="php-website-code.js">
         </script>
         <meta charset="utf-8"/>
