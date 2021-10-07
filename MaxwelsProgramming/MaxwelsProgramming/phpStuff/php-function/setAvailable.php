@@ -1,4 +1,7 @@
 <?php
+    session_start();
+?>
+<?php
     $servername = "db";
     $username = "maxim";
     $password = "maxim_password";
@@ -12,6 +15,6 @@
     die("Connection failed: " . $conn->connect_error);
     }
 
-    $user = $_GET['user'];
-    $setBusy = $conn->query("UPDATE programmer p INNER JOIN user u ON u.ID = p.P_ID SET p.Status = 'BUSY' WHERE u.Username = '$user'") or die($conn->error);
+    $user = $_SESSION['id'];
+    $setFree = $conn->query("UPDATE programmer p INNER JOIN user u ON u.ID = p.P_ID SET p.Status = 'AVAILABLE' WHERE u.ID = '$user'") or die($conn->error);
 ?>

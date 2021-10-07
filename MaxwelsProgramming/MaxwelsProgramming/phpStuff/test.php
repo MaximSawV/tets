@@ -1,7 +1,11 @@
+<?php
+    ini_set('session.gc_maxlifetime', 86400);
+    session_set_cookie_params(86400);
+    session_start();
+?>
 <html>
     <head>
         <?php
-
             $servername = "db";
             $username = "maxim";
             $password = "maxim_password";
@@ -14,79 +18,119 @@
             if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
             }
-            $test = 0;
-            $loggedIn = 0;
+            $loggedIn = false;
             $version = rand(0,999999999) * rand(0,999999999);
-            echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>");
+            echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>
+                    <script src='php-website-code.js'></script>
+            ");
 
             include 'class.php';
+            
+            if (isset($_GET['logged'])) {
+                if ($_GET['logged'] == "no") {
+                    session_unset();
+                    session_destroy();
+                    echo('<script>logout(2)</script>');
+
+                }
+            }
+
+            // $user = select * from user where Username = $login ["name"]
+            //  wenn $user == null => dann login geht
+            // wenn $user != null => Passwort prüfen
+
+            if (isset($_SESSION['user']) && isset($_SESSION['login-password']) && isset($_SESSION['id'])) {
+                for ($i = 0; $i < count($allUsers); $i++) {
+                    $login = $allUsers[$i]->getLogin();
+                    for ($i = 0; $i < count($allUsers); $i++) {
+                        $user = $allUsers[$i]->getUsername();
+                        $password = $allUsers[$i]->getPassword();
+
+                        if ($login["name"] == $user && $login["password"] == $password) {
+                            $loggedIn = true;
+                        }
+                    }
+                }
+            }
         ?>
         <title>
             Maxwels
         </title>
-        <link rel="shortcut icon" type="x-icon" href="logo_small_icon_only.png"/>
-        <script src="php-website-code.js">
-        </script>
+        <link rel="shortcut icon" type="x-icon" href="pictures/logo_small_icon_only.png"/>
         <meta charset="utf-8"/>
     </head>
     <body>
+        <?php
+            if(isset($_SESSION['user'])) {
+                $user = $_SESSION['user'];
+                echo("
+                <div class='spacer'>
+                    <p> Welcome $user </p>
+                </div>
+                ");
+            }
+        ?>
+        <div class="easter-egg" id="eegg" onclick="eegg('eegg')">
+            .
+        </div>
         <div class="page">
             <ul class="side-menu" id="sideMenu">
-                <li class="login-field" id="loginField">
-                    <form class="login">
-                        <input type="text" placeholder="Username" name="user"/>
-                        <input type="password" placeholder="Password" name="login-password"/>
-                        <span class="log-buttons">
-                            <input type="submit" value="Login"/>
-                            <input type="button" value="Register" onclick="register()"/>
-                            <input type="button" value="Cancel" onclick="logout()"/>
-                            <?php
-                                $loggedIn = 0;
-                                if (isset($_GET['user']) && isset($_GET['login-password'])) {
-                                    $name = $_GET['user'];
-                                    $password = $_GET['login-password'];
+                <?php
+                    if ($loggedIn === false) {
+                        echo('
+                                <li class="login-field" id="loginField" style="display: none;">
+                                    <form class="login" method:post;>
+                                        <input type="text" placeholder="Username" name="user"/>
+                                        <input type="password" placeholder="Password" name="login-password"/>
+                                        <span class="log-buttons">
+                                            <input type="submit" value="Login"/>
+                                            <input type="button" value="Register" onclick="register()"/>
+                                            <input type="button" value="Cancel" onclick="logout()"/>
+                                            ');
+                                                if (isset($_GET['user']) && isset($_GET['login-password'])) {
+                                                    $user = $_GET['user'];
+                                                    $password = $_GET['login-password'];
+                                                    for ($i=0; $i < count($allUsers); $i++) { 
+                                                        if ($user == $allUsers[$i]->getUsername() && $password == $allUsers[$i]->getPassword()) {
+                                                            $_SESSION['user'] = $allUsers[$i]->getUsername();
+                                                            $_SESSION['login-password'] = $password;
+                                                            $_SESSION['id'] = $allUsers[$i]->getId();
+                                                            $loggedIn = true;
+                                                            echo('<script> reload() </script>');
+                                                        }
+                                                    }
 
-                                    for ($i = 0; $i < count($allUsers); $i++) {
-                                        $id = $allUsers[$i]->getId();
-                                        $user = $allUsers[$i]->getUsername();
-                                        $email = $allUsers[$i]->getEmail();
-                                        $password2 = $allUsers[$i]->getPassword();
-
-                                        if ($name == $user && $password == $password2) {
-                                            echo('<script>loginOut()</script>');
-                                            $loggedIn = $id;
-                                            $test = 2;
-                                        }
-                                    }
-
-                                    if ($test == 2 ) {
-                                    } else {
-                                        echo('<script/>logout()</script>');
-                                        http_response_code(400);
-                                    }
-                                }
-                            ?>
-                        </span>
-                    </form>
-                </li>
+                                                    if ($loggedIn === false) {
+                                                        session_unset();
+                                                        echo('<script>logout(0)</script>');
+                                                    }
+                                                }
+                                            echo("
+                                        </span>
+                                    </form>
+                                </li>
+                        ");
+                    }
+                ?>
                 <li>
                     <a onclick="showLogin()" id="showLoginButton">
                         Login
                     </a>
                 </li>
                 <?php
-                    if ($test == 2 ) {
+                    if ($loggedIn === true ) {
+                        $currentUser = $_SESSION['id'];
                         echo('<script>test()</script>');
 
-                        $sqlTestIs = "SELECT `is` from `user` WHERE `ID` = '$loggedIn';";
+                        $sqlTestIs = "SELECT `is` from `user` WHERE `ID` = '$currentUser';";
                         $TestIs = $conn->query($sqlTestIs);
                         while($row = mysqli_fetch_assoc($TestIs)) {
                             if($row["is"] == "Programmer" || $row["is"] == "Master") {
-                                echo ("<li> <a href='http://localhost/htmlProject/phpStuff/requestProgrammer.php?user=$loggedIn' target='_blank' id='request'> Requests </a> </li>");
+                                echo ("<li> <a href='http://localhost/requestProgrammer.php' target='_blank' id='request'> Requests </a> </li>");
                             }
 
                             if($row["is"] == "Customer") {
-                                echo("<il> <a href='http://localhost/htmlProject/phpStuff/requestCustomer.php?user=$loggedIn' target='_blank' id='request'> Requests </a> </li>");
+                                echo("<il> <a href='http://localhost/requestCustomer.php' target='_blank' id='request'> Requests </a> </li>");
                             }
                         }
                         echo('<li><a onclick="logout()"> Logout </a></li>');
@@ -94,7 +138,7 @@
                 ?>
                 <li>
                     <a href="#statistic">
-                        About Us
+                        About
                     </a>
                 </li>
                 <li>
@@ -115,8 +159,8 @@
             </ul>
 
             <div class="header">
-                <img id="websiteLogo" src="maxwel_cover (2).jpg" width="100%"/>
-                <img style="top: 0" class="side-menu-button2" id="smButton" onmouseover="openSideMenu()" src="menu.png" height="50px" width="100px"/>
+                <img id="websiteLogo" src="pictures/maxwel_cover(2).jpg" width="100%"/>
+                <img style="top: 0" class="side-menu-button2" id="smButton" onclick="openSideMenu()" src="pictures/menu.png" height="50px" width="100px"/>
             </div>
             <div class="spacer">
                 <p> Programmer you can trust! </p>
@@ -168,7 +212,7 @@
                         <div class="news-container">
                             <div class="news" id="1" onclick="newsBlockOpen(1)" onmouseleave="newsBlockClose(1)">
                                 <div class="news-panel">
-                                    <img id="10" src="logo_icon_inverted.png" height="100px" width="100px"/>
+                                    <img id="10" src="pictures/logo_icon_inverted.png" height="100px" width="100px"/>
                                     <h1> First Post </h1>
                                     <p id="11"> Text </p>
                                 </div>
@@ -176,7 +220,7 @@
 
                             <div class="news" id="2" onclick="newsBlockOpen(2)" onmouseleave="newsBlockClose(2)">
                                 <div class="news-panel">
-                                    <img id="20" src="logo_icon_inverted.png" height="100px" width="100px"/>
+                                    <img id="20" src="pictures/logo_icon_inverted.png" height="100px" width="100px"/>
                                     <h1> Second Post </h1>
                                     <p id="21"> Text </p>
                                 </div>
@@ -184,7 +228,7 @@
 
                             <div class="news" id="3" onclick="newsBlockOpen(3)" onmouseleave="newsBlockClose(3)">
                                 <div class="news-panel">
-                                    <img id="30" src="logo_icon_inverted.png" height="100px" width="100px"/>
+                                    <img id="30" src="pictures/logo_icon_inverted.png" height="100px" width="100px"/>
                                     <h1> Third Post </h1>
                                     <p id="31"> Text </p>
                                 </div>
@@ -192,7 +236,7 @@
 
                             <div class="news" id="4" onclick="newsBlockOpen(4)"onmouseleave="newsBlockClose(4)">
                                 <div class="news-panel">
-                                    <img id="40" src="logo_icon_inverted.png" height="100px" width="100px"/>
+                                    <img id="40" src="pictures/logo_icon_inverted.png" height="100px" width="100px"/>
                                     <h1> Fourth Post </h1>
                                     <p id="41"> Text </p>
                                 </div>
@@ -200,7 +244,7 @@
 
                             <div class="news" id="5" onclick="newsBlockOpen(5)" onmouseleave="newsBlockClose(5)">
                                 <div class="news-panel">
-                                    <img id="50" src="logo_icon_inverted.png" height="100px" width="100px"/>
+                                    <img id="50" src="pictures/logo_icon_inverted.png" height="100px" width="100px"/>
                                     <h1> Fifth Post </h1>
                                     <p id="51"> Text </p>
                                 </div>
@@ -213,13 +257,12 @@
                 <p> How You can contact me </p>
             </div>
             <div class="footer">
-                <img src="smaller_icon.png" width="200" height="200" />
+                <img src="pictures/smaller_icon.png" width="200" height="200" />
                 <div class="contacts" id="contacts">
                     <p> Copyright © Maxwels 2021 </p>
                     <p> maxwels-programming@gmail.com </p>
                     <p> Tel: 2365/424523542625 </p>
                 </div>
-                
             </div>
         </div>
     </body>

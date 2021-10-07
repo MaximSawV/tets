@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
     $servername = "db";
     $username = "maxim";
     $password = "maxim_password";
@@ -11,8 +13,10 @@
     if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
     }
-
-    $searchText = $_GET['search'];
-    $searchUser = $conn->query("SELECT * FROM `user` WHERE `ID` = '$searchText' OR `Username` = '$searchText' OR `Email` = '$searchText'") or die($conn->error);
-    
+    if (isset($_GET['request'])) {
+        $rid = $_GET['request'];
+        $pid = $_SESSION['id'];
+        $updateRequest = $conn->query("UPDATE `requests` SET `Status` = 'DONE' WHERE `R_ID` = '$rid'") or die($conn->error);
+        var_dump($updateRequest);
+    }
 ?>

@@ -336,6 +336,18 @@ a {
     }
 }
 
+.easter-egg {
+    position: fixed;
+    width: 44px;
+    height: 44px;
+    background-color: transparent;
+    z-index: 10;
+    left: 46.6%;
+    top: 9.4%;
+    color: transparent;
+    border-radius: 50%;
+}
+
 //Request Page-----------------------------------------------------------------------------------------------
 @mixin menu-bar ($direction, $top, $left, $width, $height) {
     position: fixed;
@@ -538,7 +550,7 @@ a {
 }
 
 .request-table {
-    margin-top: 100px;
+    margin-top: 150px;
     width: 80%;
     border: #85cbff solid 5px;
     background: #0c2436;
@@ -665,4 +677,38 @@ a {
 .color-field {
     height: 200px;
     width: 300px;
+}
+
+.edit-icon {
+    position: fixed;
+    width:fit-content;
+    height: fit-content;
+    margin-top: -25;
+    margin-left: 15;
+}
+
+.icon-img {
+    position: relative;
+    max-height: 50px;
+    transition: 0.25s;
+
+    &:hover {
+        max-height: 70px;
+    }
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 400px;
+    left: 600px;
+    width: 500px;
+    height: 500px;
+    background-color: grey;
+}
+
+.popup-button {
+    width: 100px;
+    height: 50px;
+    background: white;
 }

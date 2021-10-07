@@ -2,6 +2,11 @@
 
 let to;
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+
 function openSideMenu() {
     var elem = document.getElementById("sideMenu");
     var pos = -200;
@@ -46,8 +51,16 @@ function showLogin() {
     document.getElementById("showLoginButton").style.display ="none";
 }
 
-function logout() {
-    self.location = "http://localhost/htmlProject/phpStuff/test.php";
+function reload() {
+    self.location = "http://localhost/test.php";
+}
+
+function logout(x) {
+    self.location = "http://localhost/test.php?logged=no";
+
+    if (x == 2) {
+        self.location = "http://localhost/test.php";
+    }
 }
 
 function loginOut() {
@@ -115,25 +128,23 @@ function showColorPicker() {
     document.getElementById("colorPickerMenu").style.display = "flex";
 }
 
-function setBusy(username) {
-    fetch("http://localhost/htmlProject/phpStuff/setBusy.php?user="+username, {
+function setBusy() {
+    fetch("http://localhost/php-function/setBusy.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
-        body: `user=${username}`
     });
     document.getElementById("indicator").style.backgroundColor = "red";
     document.getElementById("indicator").style.left = "1971px";
 }
 
-function setAvailable(username) {
-    fetch("http://localhost/htmlProject/phpStuff/setAvailable.php?user="+username, {
+function setAvailable() {
+    fetch("http://localhost/php-function/setAvailable.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
-        body: `user=${username}`
     });
     document.getElementById("indicator").style.backgroundColor = "#00ff00";
     document.getElementById("indicator").style.left = "2400px";
@@ -214,6 +225,28 @@ function changeColor(id) {
     }
 }
 
+let eg = 0;
+
+function eegg(id) {
+    eg+=1;
+    let egg = document.getElementById(id);
+    console.log(eg);
+    if(eg >= 5) {
+        egg.style.backgroundColor = "wheat"
+    } 
+    if(eg >= 10) {
+        console.log("oh no, you broke it!");
+        egg.style.backgroundColor = "transparent"
+    }
+
+    if(eg >= 6) {
+        let x = getRandomInt(window.innerWidth - 44)
+        let y = getRandomInt(window.innerHeight - 44)
+        egg.style.left = x +"px";
+        egg.style.top = y +"px";
+    }
+}
+
 function submitColorChange() {
     document.getElementById("body").style.background = "linear-gradient(to bottom, "+ color1 +" 0%, " + color2 +" 100%)";
     document.getElementById("request-table").style.background = "linear-gradient(to bottom, "+ color1 +" 0%, " + color2 +" 100%)";
@@ -224,14 +257,66 @@ function submitColorChange() {
     document.getElementById("programms").style.background = "linear-gradient(to bottom, "+ color1 +" 0%, " + color2 +" 100%)";
 }
 
-function search(seek) {
-    fetch("http://localhost/htmlProject/phpStuff/search.php?search="+seek, {
+function search(user, seek) {
+    fetch("http://localhost/php-function/search.php?user="+user+"&search="+seek, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
         body: `search=${seek}`
     });
+}
+let rId;
+function editRequest(rId) {
+    document.getElementById("popup").style.display = "block"
+    return rId;
+}
+
+function setRequestDate(rId) {
+    let newDate = document.getElementById("newDeadline").value;
+    fetch("http://localhost/php-function/edit_request.php?method=edit&request="+rId+"&newDate="+newDate, {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`,
+        body:   `newDate=${newDate}`
+    });
+    document.getElementById("popup").style.display = "none";
+    self.location = "http://localhost/requestCustomer.php";
+}
+
+function deleteRequest(rId) {
+    fetch("http://localhost/php-function/edit_request.php?method=delete&newDate=0&request="+rId, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`
+    });
+    self.location = "http://localhost/requestCustomer.php";
+}
+
+function takeRequest(rId) {
+    fetch("http://localhost/php-function/take_request.php?request="+rId, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`
+    });
+    self.location = "http://localhost/requestProgrammer.php";
+}
+
+function setRequestDone(rId) {
+    fetch("http://localhost/php-function/done_request.php?request="+rId, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`
+    });
+    self.location = "http://localhost/requestProgrammer.php";
 }
 
 //Animations________________________________________________________________________________________________________________________________________________
@@ -314,4 +399,3 @@ function newsBlockClose(id) {
         }
     }
 }
-
