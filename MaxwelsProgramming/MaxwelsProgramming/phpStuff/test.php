@@ -6,25 +6,15 @@
 <html>
     <head>
         <?php
-            $servername = "db";
-            $username = "maxim";
-            $password = "maxim_password";
-            $dbname ="maxwels";
+            require_once("php-function/db_connect.php");
+            require_once("php-function/class.php");
+            require_once("php-function/password_hashing.php");
 
-            // Create connection
-            $conn = new mysqli($servername, $username, $password, $dbname);
-
-            // Check connection
-            if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-            }
             $loggedIn = false;
             $version = rand(0,999999999) * rand(0,999999999);
             echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>
                     <script src='php-website-code.js'></script>
             ");
-
-            include 'class.php';
             
             if (isset($_GET['logged'])) {
                 if ($_GET['logged'] == "no") {
@@ -35,22 +25,26 @@
                 }
             }
 
-            // $user = select * from user where Username = $login ["name"]
-            //  wenn $user == null => dann login geht
-            // wenn $user != null => Passwort prüfen
-
             if (isset($_SESSION['user']) && isset($_SESSION['login-password']) && isset($_SESSION['id'])) {
-                for ($i = 0; $i < count($allUsers); $i++) {
-                    $login = $allUsers[$i]->getLogin();
-                    for ($i = 0; $i < count($allUsers); $i++) {
-                        $user = $allUsers[$i]->getUsername();
-                        $password = $allUsers[$i]->getPassword();
-
-                        if ($login["name"] == $user && $login["password"] == $password) {
-                            $loggedIn = true;
+                $id = $_SESSION['id'];
+                $user = $_SESSION['user'];
+                $password = $_SESSION['login-password'];
+                $getUser = $pdo->prepare("SELECT `Username`, `Password` FROM `user` WHERE `ID` = '$id'");
+                $getUser->execute();
+                $result = $getUser->fetchAll();
+                foreach($result as $userTest) {
+                    if ($userTest['Username'] == $user) {
+                        if ($userTest['Password'] == $password){
+                            $GLOBALS['loggedIn'] = true;
+                        } else {
+                            $GLOBALS['loggedIn']  = false;
                         }
+                    } else {
+                        $GLOBALS['loggedIn']  = false;
                     }
                 }
+            } else {
+                $GLOBALS['loggedIn']  = false;
             }
         ?>
         <title>
@@ -76,7 +70,7 @@
         <div class="page">
             <ul class="side-menu" id="sideMenu">
                 <?php
-                    if ($loggedIn === false) {
+                    if ($GLOBALS['loggedIn']  == false) {
                         echo('
                                 <li class="login-field" id="loginField" style="display: none;">
                                     <form class="login" method:post;>
@@ -88,19 +82,25 @@
                                             <input type="button" value="Cancel" onclick="logout()"/>
                                             ');
                                                 if (isset($_GET['user']) && isset($_GET['login-password'])) {
-                                                    $user = $_GET['user'];
+                                                    $userName = $_GET['user'];
                                                     $password = $_GET['login-password'];
-                                                    for ($i=0; $i < count($allUsers); $i++) { 
-                                                        if ($user == $allUsers[$i]->getUsername() && $password == $allUsers[$i]->getPassword()) {
-                                                            $_SESSION['user'] = $allUsers[$i]->getUsername();
-                                                            $_SESSION['login-password'] = $password;
-                                                            $_SESSION['id'] = $allUsers[$i]->getId();
-                                                            $loggedIn = true;
-                                                            echo('<script> reload() </script>');
+                                                    $allUsers = getAllUsers();
+                                                    foreach ($allUsers as $user) { 
+                                                        if ($userName == $user->getUsername()){
+                                                            $salt = $user->getEmail();
+                                                            $hashedPassword = hashing($password, $salt);
+                                                            var_dump($hashedPassword);
+                                                            if ($hashedPassword == $user->getPassword()) {
+                                                                $_SESSION['user'] = $user->getUsername();
+                                                                $_SESSION['login-password'] = $hashedPassword;
+                                                                $_SESSION['id'] = $user->getId();
+                                                                $GLOBALS['loggedIn']  = true;
+                                                                echo('<script> reload() </script>');
+                                                            }
                                                         }
                                                     }
 
-                                                    if ($loggedIn === false) {
+                                                    if ($GLOBALS['loggedIn'] == false) {
                                                         session_unset();
                                                         echo('<script>logout(0)</script>');
                                                     }
@@ -118,20 +118,19 @@
                     </a>
                 </li>
                 <?php
-                    if ($loggedIn === true ) {
+                    if ($GLOBALS['loggedIn']  == true ) {
                         $currentUser = $_SESSION['id'];
                         echo('<script>test()</script>');
 
-                        $sqlTestIs = "SELECT `is` from `user` WHERE `ID` = '$currentUser';";
-                        $TestIs = $conn->query($sqlTestIs);
-                        while($row = mysqli_fetch_assoc($TestIs)) {
-                            if($row["is"] == "Programmer" || $row["is"] == "Master") {
-                                echo ("<li> <a href='http://localhost/requestProgrammer.php' target='_blank' id='request'> Requests </a> </li>");
-                            }
+                        $getUser = $pdo->prepare("SELECT `is` AS `is` FROM `user` WHERE `ID` = '$currentUser'");
+                        $getUser->execute();
+                        $result = $getUser->fetch();
+                        if ($result['is'] == "Programmer") {
+                            echo ("<li> <a href='http://localhost/requestProgrammer.php' target='_blank' id='request'> Requests </a> </li>");
+                        }
 
-                            if($row["is"] == "Customer") {
-                                echo("<il> <a href='http://localhost/requestCustomer.php' target='_blank' id='request'> Requests </a> </li>");
-                            }
+                        if($result["is"] == "Customer") {
+                            echo("<il> <a href='http://localhost/requestCustomer.php' target='_blank' id='request'> Requests </a> </li>");
                         }
                         echo('<li><a onclick="logout()"> Logout </a></li>');
                     }
@@ -179,8 +178,9 @@
                         <div id="7" onclick="newsBlockOpen(7)" onmouseleave="newsBlockClose(7)">
                             <h1 id="70"> Requests</h1>
                             <?php
-                                $sqlGetAllRequests = $conn->query("SELECT COUNT(*) as total FROM `requests`");
-                                $row = $sqlGetAllRequests -> fetch_assoc();
+                                $sqlGetAllRequests = $pdo->query("SELECT COUNT(*) as total FROM `requests`");
+                                $sqlGetAllRequests->execute();
+                                $row = $sqlGetAllRequests ->fetch();
                                 $number = $row['total'];
                                 echo('<p id=71>' . $number . ' Requests</p>');
                             ?>
@@ -190,11 +190,13 @@
                             <h1 id="80"> Rating </h1>
                             <?php
 
-                                $sqlGetAllRequests = $conn->query("SELECT COUNT(*) as total FROM `requests` WHERE `Status` = 'DONE'");
-                                $row = $sqlGetAllRequests -> fetch_assoc();
+                                $sqlGetAllRequests = $pdo->prepare("SELECT COUNT(*) as total FROM `requests` WHERE `Status` = 'DONE'");
+                                $sqlGetAllRequests->execute();
+                                $row = $sqlGetAllRequests->fetch();
                                 $number = $row['total'];
-                                $sqlGetAllRequests = $conn->query("SELECT COUNT(*) as total FROM `requests` WHERE `Satisfied` = 'YES'");
-                                $row = $sqlGetAllRequests -> fetch_assoc();
+                                $sqlGetAllRequests = $pdo->prepare("SELECT COUNT(*) as total FROM `requests` WHERE `Satisfied` = 'YES'");
+                                $sqlGetAllRequests->execute();
+                                $row = $sqlGetAllRequests->fetch();
                                 $numberYes = $row['total'];
                                 if($number + $numberYes > 1) {
                                     $rating=(round(($numberYes / $number)*100));

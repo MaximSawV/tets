@@ -14,8 +14,9 @@
             die("Connection failed: " . $conn->connect_error);
             }
 
-            $version = rand(0,10);
-            echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>")
+            $version = rand(0,1000000);
+            echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>");
+            require_once("php-function/password_hashing.php");
         ?>
         <title>
             Registrieren
@@ -86,6 +87,7 @@
                             }
 
                             if ($testUserUniqe + $testMailUniqe == 0 ) {
+                                $password1 = hashing($password1, $mail);
                                 $sql = "INSERT INTO user (Username, Password, Email) VALUES ('$name', '$password1', '$mail')";
                                 $conn->query($sql);
                                 $sqlGetID = "SELECT `ID` FROM `user` WHERE `Email` = '$mail';";

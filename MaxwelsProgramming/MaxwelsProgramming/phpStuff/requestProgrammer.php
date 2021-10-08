@@ -4,26 +4,13 @@
 <html>
     <head>
         <?php
-            $servername = "db";
-            $username = "maxim";
-            $password = "maxim_password";
-            $dbname ="maxwels";
-
-            // Create connection
-            $conn = new mysqli($servername, $username, $password, $dbname);
-
-            // Check connection
-            if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-            }
-            $test = 0;
+            require_once("php-function/db_connect.php");
+            require_once("php-function/class.php");
             $loggedIn = 0;
             $version = rand(0,999999999) + rand(0,999999999);
             echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>
                 <script src='php-website-code.js?v=$version'></script>
             ");
-            
-            include 'class.php';
         ?>
         <meta charset="utf-8"/>
         <link rel="shortcut icon" type="x-icon" href="pictures/logo_small_icon_only.png"/>
@@ -40,7 +27,8 @@
                             Programmer
                         </a>
                         <ul id="programmer-chart">
-                             <?php
+                            <?php
+                                $allProgrammers = getAllProgrammers();
                                 foreach ($allProgrammers as $programmer) {
                                     $pid = $programmer->getPid();
                                     $name = $programmer->getFirstName();
@@ -164,6 +152,8 @@
                                 <tbody>
                         ");
                         $iconSpaceTop = 300;
+                        $allRequests = getAllRequests();
+                        $allUsers = getAllUsers();
                         foreach ($allRequests as $request) {
                             $rid = $request->getRid();
                             $requestedBy = $request->getRequestedBy();
@@ -222,7 +212,7 @@
                                 </thead>
                                 <tbody>
                         ");
-
+                        $allRequests = getAllRequests();
                         foreach ($allProgrammers as $programmer) {
                             if ($programmer->getId() == $_SESSION['id']);{
                                 foreach ($allRequests as $request) {
@@ -285,7 +275,7 @@
                                 </thead>
                                 <tbody>
                         ");
-
+                        $allRequests = getAllRequests();
                         foreach ($allProgrammers as $programmer) {
                             if ($programmer->getId() == $_SESSION['id']);{
                                 foreach ($allRequests as $request) {
