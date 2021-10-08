@@ -6,26 +6,13 @@
 <html>
     <head>
         <?php
-            $servername = "db";
-            $username = "maxim";
-            $password = "maxim_password";
-            $dbname ="maxwels";
-
-            // Create connection
-            $conn = new mysqli($servername, $username, $password, $dbname);
-
-            // Check connection
-            if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-            }
-            $test = 0;
+            require_once("php-function/db_connect.php");
+            require_once("php-function/class.php");
             $loggedIn = 0;
             $version = rand(0,999999999) + rand(0,999999999);
             echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>
                 <script src='php-website-code.js?v=$version'></script>
             ");
-
-            include 'class.php';
         ?>
         <meta charset="utf-8"/>
         <link rel="shortcut icon" type="x-icon" href="pictures/logo_small_icon_only.png"/>
@@ -43,6 +30,7 @@
                         </a>
                         <ul>
                             <?php
+                                $allProgrammers = getAllProgrammers();
                                 foreach ($allProgrammers as $programmer) {
                                     $pid = $programmer->getPid();
                                     $status = $programmer->getStatus();
@@ -149,6 +137,7 @@
                                 <tbody>
                         ");
                         $iconSpaceTop = 300;
+                        $allRequests = getAllRequests();
                         foreach ($allRequests as $request) {
                             $rid = $request->getRid();
                             $requestedBy = $request->getRequestedBy();
@@ -210,7 +199,7 @@
                                 </thead>
                                 <tbody>
                         ");
-
+                        $allRequests = getAllRequests();
                         foreach ($allRequests as $request) {
                             $rid = $request->getRid();
                             $requestedBy = $request->getRequestedBy();
@@ -270,9 +259,10 @@
                                     $type = $_GET['type'];
                                     $topic = $_GET['topic'];
                                     $deadline = $_GET['deadline'];
-                                    $user = $_SESSION['id'];
-                                    $sqlCreateRequest = "INSERT INTO `requests`(`Requested_by`, `Topic`, `Type`, `Deadline`) VALUES ('$user', '$type', '$topic', '$deadline')";
-                                    $conn->query($sqlCreateRequest) or die($conn-> error);
+                                    $userId = $_SESSION['id'];
+                                    $sqlCreateRequest = $pdo->prepare("INSERT INTO `requests`(`Requested_by`, `Topic`, `Type`, `Deadline`) VALUES ('$userId', '$type', '$topic', '$deadline')");
+                                    $sqlCreateRequest->execute() or die($conn-> error);
+
                                     echo ("<script> self.location = 'http://localhost/requestCustomer.php' </script>");
                                 }
                             ?>
