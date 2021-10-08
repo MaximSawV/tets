@@ -6,18 +6,7 @@
 <html>
     <head>
         <?php
-            $servername = "db";
-            $username = "maxim";
-            $password = "maxim_password";
-            $dbname ="maxwels";
-
-            // Create connection
-            $conn = new mysqli($servername, $username, $password, $dbname);
-
-            // Check connection
-            if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-            }
+            require_once("php-function/db_connect.php");
             $loggedIn = false;
             $version = rand(0,999999999) * rand(0,999999999);
             echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>
