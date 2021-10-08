@@ -712,3 +712,28 @@ a {
     height: 50px;
     background: white;
 }
+
+.mail-icon {
+    display: block;
+    position: fixed;
+    top: 10px;
+    left: 0;
+    z-index: 1;
+    height: fit-content;
+    width: fit-content;
+}
+
+.notification {
+    display: flex;
+    position: fixed;
+    max-height: 25px;
+    width: 25px;
+    top: 2px;
+    left: 104px;
+    background: red;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    border-radius: 50%;
+}

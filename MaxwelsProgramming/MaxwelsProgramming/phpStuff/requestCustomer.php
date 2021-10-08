@@ -22,6 +22,20 @@
     </head>
     <body class="bg">
         <div class="face">
+            <div class="mail-icon">
+                <image src="pictures/mail_icon.png" style="height: 90"/>
+            </div>
+            <div class="notification">
+                <?php
+                    $id = $_SESSION['id'];
+                    $countNewNews = $pdo->prepare("SELECT COUNT(`N_ID`) as `number` FROM `news` WHERE `For` = '$id'");
+                    $countNewNews->execute();
+                    $result = $countNewNews->fetch();
+                    $text = $result['number'];
+                    echo("<p class='number' id='number'> $text </p>")
+
+                ?>
+            </div>
             <div class="programmer-bar">
                 <ul>
                     <li class="programmers">
