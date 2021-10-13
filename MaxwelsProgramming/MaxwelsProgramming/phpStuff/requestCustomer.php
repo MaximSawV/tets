@@ -8,11 +8,19 @@
         <?php
             require_once("php-function/db_connect.php");
             require_once("php-function/class.php");
+            require_once("php-function/get_os.php");
             $loggedIn = 0;
             $version = rand(0,999999999) + rand(0,999999999);
             echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>
                 <script src='php-website-code.js?v=$version'></script>
             ");
+            $ip = 0;
+            $os = getOS();
+            if ($os == "Windows 10") {
+                $GLOBALS['ip'] = "192.168.175.128";
+            } else if ($os == "Linux") {
+                $GLOBALS['ip'] = "localhost";
+            }
         ?>
         <meta charset="utf-8"/>
         <link rel="shortcut icon" type="x-icon" href="pictures/logo_small_icon_only.png"/>
@@ -22,13 +30,13 @@
     </head>
     <body class="bg">
         <div class="face">
-            <div class="mail-icon">
+            <div class="mail-icon" onclick="showMessages('messageBox')">
                 <image src="pictures/mail_icon.png" style="height: 90"/>
             </div>
             <div class="notification">
                 <?php
                     $id = $_SESSION['id'];
-                    $countNewNews = $pdo->prepare("SELECT COUNT(`N_ID`) as `number` FROM `news` WHERE `For` = '$id'");
+                    $countNewNews = $pdo->prepare("SELECT COUNT(`N_ID`) as `number` FROM `news` WHERE `For` = '$id' AND `Seen` = 'NO';");
                     $countNewNews->execute();
                     $result = $countNewNews->fetch();
                     $text = $result['number'];
@@ -275,13 +283,57 @@
                                     $deadline = $_GET['deadline'];
                                     $userId = $_SESSION['id'];
                                     $sqlCreateRequest = $pdo->prepare("INSERT INTO `requests`(`Requested_by`, `Topic`, `Type`, `Deadline`) VALUES ('$userId', '$type', '$topic', '$deadline')");
-                                    $sqlCreateRequest->execute() or die($conn-> error);
+                                    $sqlCreateRequest->execute();
+                                    $ip=$GLOBALS['ip'];
 
-                                    echo ("<script> self.location = 'http://localhost/requestCustomer.php' </script>");
+                                    echo ("<script> self.location = 'http://$ip/requestCustomer.php' </script>");
                                 }
                             ?>
                         </form>
                     </div>          
+                </div>
+                <div class="message-box" id="messageBox">
+                    <div class="mb-head">
+                        <div onclick="closeMessageBox('messageBox')">
+                            X 
+                        </div>
+                    </div>
+                    <div class="message-window">
+                        <div>
+                            <table class='request-table' id='request-table'>
+                                <thead>
+                                    <tr>
+                                        <th> From </th>
+                                        <th> Message </th>
+                                        <th> Date </th>
+                                        <th> Seen </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $curentUser = $_SESSION['id'];
+                                $getAllNewNews = $pdo->prepare("SELECT `user`.`Username` as 'From', `news`.`Type` as 'Message', `news`.`Date_of_Creation` as 'Date', `news`.`N_ID` as 'ID'
+                                                            FROM `news` INNER JOIN `user` ON `user`.`ID` = `news`.`Programmer` WHERE `news`.`For` = '$curentUser' AND `news`.`Seen` = 'NO';");
+                                $getAllNewNews->execute() or die;
+                                while ($message = $getAllNewNews->fetch()) {
+                                    $from = $message['From'];
+                                    $text = $message['Message'];
+                                    $date = $message['Date'];
+                                    $newsId = $message['ID'];
+                                    echo("
+                                    <tr>
+                                        <td> $from </td>
+                                        <td> $text </td>
+                                        <td> $date </td>
+                                        <td onclick='setSeenYes($newsId)'> NO </td>
+                                    </tr>
+                                    ");
+                                }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

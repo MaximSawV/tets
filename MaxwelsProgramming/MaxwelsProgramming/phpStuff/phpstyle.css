@@ -582,4 +582,32 @@ a {
   z-index: 2;
   border-radius: 50%; }
 
+.message-box {
+  display: none;
+  height: 80%;
+  width: 80%;
+  flex-direction: column;
+  position: fixed;
+  top: 120px;
+  left: 120px;
+  border: black solid 2px;
+  background: linear-gradient(to bottom, #0c2436 0%, #84cafe 100%);
+  align-items: center; }
+
+.mb-head {
+  width: 100%;
+  height: fit-content;
+  background: transparent;
+  border: solid 1px black; }
+  .mb-head > div {
+    color: red;
+    font-size: xxx-large;
+    height: 100%;
+    width: 20%; }
+
+.message-window {
+  height: 90%;
+  width: 80%;
+  overflow: auto; }
+
 /*# sourceMappingURL=phpstyle.css.map */

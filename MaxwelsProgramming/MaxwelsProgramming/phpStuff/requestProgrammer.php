@@ -355,10 +355,10 @@
             }
             if ($userstatus == "AVAILABLE") {
                 $color = "#00ff00";
-                $cord ="2400px";
+                $cord ="94%";
             } else {
                 $color = "#ff0000";
-                $cord ="1970px";
+                $cord ="77%";
             }
             echo("
             <span id='indicator' class='status-indicator' style='background: $color; left: $cord';>

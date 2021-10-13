@@ -9,12 +9,21 @@
             require_once("php-function/db_connect.php");
             require_once("php-function/class.php");
             require_once("php-function/password_hashing.php");
+            require_once("php-function/get_os.php");
 
             $loggedIn = false;
             $version = rand(0,999999999) * rand(0,999999999);
             echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>
                     <script src='php-website-code.js'></script>
             ");
+            
+            $ip = 0;
+            $os = getOS();
+            if ($os == "Windows 10") {
+                $GLOBALS['ip'] = "192.168.175.128";
+            } else if ($os == "Linux") {
+                $GLOBALS['ip'] = "localhost";
+            }
             
             if (isset($_GET['logged'])) {
                 if ($_GET['logged'] == "no") {
@@ -126,11 +135,11 @@
                         $getUser->execute();
                         $result = $getUser->fetch();
                         if ($result['is'] == "Programmer") {
-                            echo ("<li> <a href='http://localhost/requestProgrammer.php' target='_blank' id='request'> Requests </a> </li>");
+                            echo ("<li> <a href='http://".$GLOBALS['ip']."/requestProgrammer.php' target='_blank' id='request'> Requests </a> </li>");
                         }
 
                         if($result["is"] == "Customer") {
-                            echo("<il> <a href='http://localhost/requestCustomer.php' target='_blank' id='request'> Requests </a> </li>");
+                            echo("<il> <a href='http://".$GLOBALS['ip']."/requestCustomer.php' target='_blank' id='request'> Requests </a> </li>");
                         }
                         echo('<li><a onclick="logout()"> Logout </a></li>');
                     }

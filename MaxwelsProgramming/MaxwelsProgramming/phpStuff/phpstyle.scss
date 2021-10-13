@@ -364,6 +364,18 @@ a {
     }
 }
 
+@media only screen and (max-width: 1920px) {
+    .status-indicator {
+        position: fixed;
+        top: 100;
+        height: 30px;
+        width: 100px;
+        border-radius: 20%;
+        display: inline-block;
+        transition: 0.5s;
+    }
+}
+
 .bg {
     background: #0c2436;
     background: linear-gradient(to bottom, #0c2436 0%,#84cafe 100%);
@@ -514,7 +526,6 @@ a {
     border-radius: 20%;
     display: inline-block;
     transition: 0.5s;
-
 }
 
 .list-face {
@@ -736,4 +747,37 @@ a {
     align-items: center;
     z-index: 2;
     border-radius: 50%;
+}
+
+.message-box {
+    display: none;
+    height: 80%;
+    width: 80%;
+    flex-direction: column;
+    position: fixed;
+    top: 120px;
+    left: 120px;
+    border: black solid 2px;
+    background: linear-gradient(to bottom, #0c2436 0%, #84cafe 100%);
+    align-items: center;
+}
+
+.mb-head {
+    width: 100%;
+    height: fit-content;
+    background: transparent;
+    border: solid 1px black;
+
+    & > div {
+        color: red;
+        font-size: xxx-large;
+        height: 100%;
+        width: 20%;
+    }
+}
+
+.message-window {
+    height: 90%;
+    width: 80%;
+    overflow: auto;
 }
