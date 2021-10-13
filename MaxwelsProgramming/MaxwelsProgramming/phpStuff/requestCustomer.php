@@ -8,19 +8,11 @@
         <?php
             require_once("php-function/db_connect.php");
             require_once("php-function/class.php");
-            require_once("php-function/get_os.php");
             $loggedIn = 0;
             $version = rand(0,999999999) + rand(0,999999999);
             echo("<link rel='stylesheet' href='phpstyle.css?v=$version'/>
                 <script src='php-website-code.js?v=$version'></script>
             ");
-            $ip = 0;
-            $os = getOS();
-            if ($os == "Windows 10") {
-                $GLOBALS['ip'] = "192.168.175.128";
-            } else if ($os == "Linux") {
-                $GLOBALS['ip'] = "localhost";
-            }
         ?>
         <meta charset="utf-8"/>
         <link rel="shortcut icon" type="x-icon" href="pictures/logo_small_icon_only.png"/>
@@ -284,9 +276,7 @@
                                     $userId = $_SESSION['id'];
                                     $sqlCreateRequest = $pdo->prepare("INSERT INTO `requests`(`Requested_by`, `Topic`, `Type`, `Deadline`) VALUES ('$userId', '$type', '$topic', '$deadline')");
                                     $sqlCreateRequest->execute();
-                                    $ip=$GLOBALS['ip'];
-
-                                    echo ("<script> self.location = 'http://$ip/requestCustomer.php' </script>");
+                                    echo ("<script> self.location = 'http://localhost/requestCustomer.php' </script>");
                                 }
                             ?>
                         </form>

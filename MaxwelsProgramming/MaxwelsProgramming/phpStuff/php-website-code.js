@@ -1,9 +1,4 @@
 "use strict";
-// This is only for  development {
-if (navigator.userAgent.indexOf("Win")!=-1) {window.ip = "192.168.175.128";}
-if (navigator.userAgent.indexOf("Linux")!=-1) {window.ip = "localhost";}
-// This is only for  development }
-
 let to;
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -55,14 +50,14 @@ function showLogin() {
 }
 
 function reload() {
-    self.location = "http://"+window.ip+"/test.php";
+    self.location = "http://localhost/test.php";
 }
 
 function logout(x) {
-    self.location = "http://"+window.ip+"/test.php?logged=no";
+    self.location = "http://localhost/test.php?logged=no";
 
     if (x == 2) {
-        self.location = "http://"+window.ip+"/test.php";
+        self.location = "http://localhost/test.php";
     }
 }
 
@@ -132,7 +127,7 @@ function showColorPicker() {
 }
 
 function setBusy() {
-    fetch("http://"+window.ip+"/php-function/setBusy.php", {
+    fetch("http://localhost/php-function/setBusy.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -143,7 +138,7 @@ function setBusy() {
 }
 
 function setAvailable() {
-    fetch("http://"+window.ip+"/php-function/setAvailable.php", {
+    fetch("http://localhost/php-function/setAvailable.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -261,7 +256,7 @@ function submitColorChange() {
 }
 
 function search(user, seek) {
-    fetch("http://"+window.ip+"/php-function/search.php?user="+user+"&search="+seek, {
+    fetch("http://localhost/php-function/search.php?user="+user+"&search="+seek, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -277,7 +272,7 @@ function editRequest(rId) {
 
 function setRequestDate(rId) {
     let newDate = document.getElementById("newDeadline").value;
-    fetch("http://"+window.ip+"/php-function/edit_request.php?method=edit&request="+rId+"&newDate="+newDate, {
+    fetch("http://localhost/php-function/edit_request.php?method=edit&request="+rId+"&newDate="+newDate, {
         method: "POST",
         headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -286,40 +281,40 @@ function setRequestDate(rId) {
         body:   `newDate=${newDate}`
     });
     document.getElementById("popup").style.display = "none";
-    self.location = "http://"+window.ip+"/requestCustomer.php";
+    self.location = "http://localhost/requestCustomer.php";
 }
 
 function deleteRequest(rId) {
-    fetch("http://"+window.ip+"/php-function/edit_request.php?method=delete&newDate=0&request="+rId, {
+    fetch("http://localhost/php-function/edit_request.php?method=delete&newDate=0&request="+rId, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
         body:   `request=${rId}`
     });
-    self.location = "http://"+window.ip+"/requestCustomer.php";
+    self.location = "http://localhost/requestCustomer.php";
 }
 
 function takeRequest(rId) {
-    fetch("http://"+window.ip+"/php-function/take_request.php?request="+rId, {
+    fetch("http://localhost/php-function/take_request.php?request="+rId, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
         body:   `request=${rId}`
     });
-    self.location = "http://"+window.ip+"/requestProgrammer.php";
+    self.location = "http://localhost/requestProgrammer.php";
 }
 
 function setRequestDone(rId) {
-    fetch("http://"+window.ip+"/php-function/done_request.php?request="+rId, {
+    fetch("http://localhost/php-function/done_request.php?request="+rId, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
         body:   `request=${rId}`
     });
-    self.location = "http://"+window.ip+"/requestProgrammer.php";
+    self.location = "http://localhost/requestProgrammer.php";
 }
 
 function showMessages(id) {
@@ -334,14 +329,14 @@ function closeMessageBox(id) {
 }
 
 function setSeenYes(id) {
-    fetch("http://"+window.ip+"/php-function/setNewsYes.php?news="+id, {
+    fetch("http://localhost/php-function/setNewsYes.php?news="+id, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
         body:   `news=${id}`
     });
-    self.location = "http://"+window.ip+"/requestCustomer.php";
+    self.location = "http://localhost/requestCustomer.php";
 }
 
 //Animations________________________________________________________________________________________________________________________________________________
