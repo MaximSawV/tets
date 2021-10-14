@@ -183,8 +183,8 @@
                                         <td> $status </td>
                                         <td>
                                             <div class='edit-icon' id='editIcon'>
-                                                <image class='icon-img' src='pictures/edit_icon.png' onclick='editRequest($rid)'/>
-                                                <image class='icon-img' src='pictures/delete-icon.png' onclick='deleteRequest($rid)'/>
+                                                <image class='icon-img' src='pictures/edit_icon.png' onclick='editRequest($rid, \"edit\")'/>
+                                                <image class='icon-img' src='pictures/delete-icon.png' onclick='editRequest($rid, \"delete\")'/>
                                             </div>
                                         </td>
                                     </tr>
@@ -296,28 +296,50 @@
                                         <th> From </th>
                                         <th> Message </th>
                                         <th> Date </th>
-                                        <th> Seen </th>
+                                        <th> Rating </th>
+                                        <th> Check </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php
                                 $curentUser = $_SESSION['id'];
-                                $getAllNewNews = $pdo->prepare("SELECT `user`.`Username` as 'From', `news`.`Type` as 'Message', `news`.`Date_of_Creation` as 'Date', `news`.`N_ID` as 'ID'
-                                                            FROM `news` INNER JOIN `user` ON `user`.`ID` = `news`.`Programmer` WHERE `news`.`For` = '$curentUser' AND `news`.`Seen` = 'NO';");
+                                $getAllNewNews = $pdo->prepare("SELECT `user`.`Username` AS 'From', `requests`.`R_ID` AS 'RID', `news`.`Type` AS 'Message', `news`.`Date_of_Creation` AS 'Date', `news`.`N_ID` AS 'ID' FROM `news` 
+                                                                INNER JOIN `user` ON `user`.`ID` = `news`.`Programmer` INNER JOIN `requests` ON `requests`.`R_ID` = `news`.`Request` 
+                                                                WHERE `news`.`For` = '$curentUser' AND `news`.`Seen` = 'NO' ORDER BY `news`.`Date_of_Creation` DESC;");
                                 $getAllNewNews->execute() or die;
                                 while ($message = $getAllNewNews->fetch()) {
                                     $from = $message['From'];
                                     $text = $message['Message'];
                                     $date = $message['Date'];
                                     $newsId = $message['ID'];
-                                    echo("
-                                    <tr>
-                                        <td> $from </td>
-                                        <td> $text </td>
-                                        <td> $date </td>
-                                        <td onclick='setSeenYes($newsId)'> NO </td>
-                                    </tr>
-                                    ");
+                                    $rid = $message['RID'];
+                                    if ($text == "Request taken") {
+                                        echo("
+                                        <tr>
+                                            <td> $from </td>
+                                            <td> $text </td>
+                                            <td> $date </td>
+                                            <td> /// </td>
+                                            <td> 
+                                                <image class='icon-img' src='pictures/submitbutton.png' onclick='setSeenYes($newsId)'/>
+                                            </td>
+                                        </tr>
+                                        ");
+                                    } else {
+                                         echo("
+                                        <tr>
+                                            <td> $from </td>
+                                            <td> $text </td>
+                                            <td> $date </td>
+                                            <td class=\"rateRequestField\">
+                                                <div class=\"positiveRequest\" onclick=\"rateDoneRequest($rid, 'YES', $newsId)\"></div>
+                                                <div class=\"negativeRequest\" onclick=\"rateDoneRequest($rid, 'NO', $newsId)\"></div> 
+                                            </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                        ");
+                                    }
                                 }
                                 ?>
                                 </tbody>
@@ -329,7 +351,7 @@
         </div>
         <div id="popup" class="popup">
             <input type="date" id="newDeadline"/>
-            <div class="popup-button" onclick="setRequestDate()"> Submit </div>
+            <div class="popup-button" id="popupButton"> Submit </div>
         </div>
     </body>
 </html>

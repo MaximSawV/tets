@@ -126,28 +126,6 @@ function showColorPicker() {
     document.getElementById("colorPickerMenu").style.display = "flex";
 }
 
-function setBusy() {
-    fetch("http://localhost/php-function/setBusy.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-    });
-    document.getElementById("indicator").style.backgroundColor = "red";
-    document.getElementById("indicator").style.left = "77%";
-}
-
-function setAvailable() {
-    fetch("http://localhost/php-function/setAvailable.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-    });
-    document.getElementById("indicator").style.backgroundColor = "#00ff00";
-    document.getElementById("indicator").style.left = "94%";
-
-}
 let select;
 let hexNumber;
 let color1;
@@ -255,66 +233,16 @@ function submitColorChange() {
     document.getElementById("programms").style.background = "linear-gradient(to bottom, "+ color1 +" 0%, " + color2 +" 100%)";
 }
 
-function search(user, seek) {
-    fetch("http://localhost/php-function/search.php?user="+user+"&search="+seek, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-        body: `search=${seek}`
-    });
-}
-let rId;
-function editRequest(rId) {
-    document.getElementById("popup").style.display = "block"
-    return rId;
-}
 
-function setRequestDate(rId) {
-    let newDate = document.getElementById("newDeadline").value;
-    fetch("http://localhost/php-function/edit_request.php?method=edit&request="+rId+"&newDate="+newDate, {
-        method: "POST",
-        headers: {
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-        body:   `request=${rId}`,
-        body:   `newDate=${newDate}`
-    });
-    document.getElementById("popup").style.display = "none";
-    self.location = "http://localhost/requestCustomer.php";
-}
-
-function deleteRequest(rId) {
-    fetch("http://localhost/php-function/edit_request.php?method=delete&newDate=0&request="+rId, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-        body:   `request=${rId}`
-    });
-    self.location = "http://localhost/requestCustomer.php";
-}
-
-function takeRequest(rId) {
-    fetch("http://localhost/php-function/take_request.php?request="+rId, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-        body:   `request=${rId}`
-    });
-    self.location = "http://localhost/requestProgrammer.php";
-}
-
-function setRequestDone(rId) {
-    fetch("http://localhost/php-function/done_request.php?request="+rId, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-        body:   `request=${rId}`
-    });
-    self.location = "http://localhost/requestProgrammer.php";
+function editRequest(rid, method) {
+    console.log(method);
+    if (method == "delete") {
+        setRequest(rid, "delete");
+    }
+    if (method == "edit") {
+        document.getElementById("popup").style.display = "block";
+        document.getElementById("popupButton").setAttribute("onclick", "setRequest("+rid+", 'edit')");
+    }
 }
 
 function showMessages(id) {
@@ -328,15 +256,146 @@ function closeMessageBox(id) {
     document.getElementById(id).style.display = "none";
 }
 
+//php-fetch_________________________________________________________________________________________________________________________________________________
+
+function setBusy() {
+    fetch("http://localhost/php-function/setBusy.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+    })
+    .then(() => {
+        document.getElementById("indicator").style.backgroundColor = "red";
+        document.getElementById("indicator").style.left = "77%";
+    })
+    .catch(() => {
+        alert("Please conntact our support under maxwels.contacts@gmail.com");
+    })
+    ;
+}
+
+function setAvailable() {
+    fetch("http://localhost/php-function/setAvailable.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+    })
+    .then(() => {
+        document.getElementById("indicator").style.backgroundColor = "#00ff00";
+        document.getElementById("indicator").style.left = "94%";
+    })
+    .catch(() => {
+        alert("Please conntact our support under maxwels.contacts@gmail.com");
+    })
+    ;
+}
+
+function search(user, seek) {
+    fetch("http://localhost/php-function/search.php?user="+user+"&search="+seek, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body: `search=${seek}`
+    })
+    .then(() => {
+        //
+    })
+    .catch(() => {
+        alert("Please conntact our support under maxwels.contacts@gmail.com");
+    })
+    ;
+}
+
+function setRequest(rId, method) {
+    let newDate = document.getElementById("newDeadline").value;
+    fetch("http://localhost/php-function/edit_request.php?method="+method+"&request="+rId+"&newDate="+newDate, {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`,
+        body:   `newDate=${newDate}`
+    })
+    .then(() => {
+        self.location = "http://localhost/requestCustomer.php";
+    })
+    .catch(() => {
+        alert("Please conntact our support under maxwels.contacts@gmail.com");
+    })
+    ;
+}
+
 function setSeenYes(id) {
-    fetch("http://localhost/php-function/setNewsYes.php?news="+id, {
+    fetch("http://localhost/php-function/setNewYes.php?news="+id, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
         body:   `news=${id}`
-    });
-    self.location = "http://localhost/requestCustomer.php";
+    })
+    .then(() => {
+        self.location = "http://localhost/requestCustomer.php";
+    })
+    .catch(() => {
+        alert("Please conntact our support under maxwels.contacts@gmail.com");
+    })
+    ;
+}
+
+function setRequestDone(rId) {
+    fetch("http://localhost/php-function/done_request.php?request="+rId, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`
+    })
+    .then(() => {
+        self.location = "http://localhost/requestProgrammer.php";
+    })
+    .catch(() => {
+        alert("Please conntact our support under maxwels.contacts@gmail.com");
+    })
+    ;
+}
+
+function takeRequest(rId) {
+    fetch("http://localhost/php-function/take_request.php?request="+rId, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`
+    })
+    .then(() => {
+        self.location = "http://localhost/requestProgrammer.php";
+    })
+    .catch(() => {
+        alert("Please conntact our support under maxwels.contacts@gmail.com");
+    })
+    ;
+}
+
+function rateDoneRequest(rId, rating, nId) {
+    fetch("http://localhost/php-function/rate_request.php?satisfied="+rating+"&request="+rId+"&news="+nId, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body:   `request=${rId}`,
+        body:   `satisifed=${rating}`,
+        body:   `news=${nId}`
+    })
+    .then(() => {
+        self.location = "http://localhost/requestCustomer.php";
+    })
+    .catch(() => {
+        alert("Please conntact our support under maxwels.contacts@gmail.com");
+    })
+    ;
 }
 
 //Animations________________________________________________________________________________________________________________________________________________

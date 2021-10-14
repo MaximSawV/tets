@@ -54,11 +54,14 @@
     </head>
     <body>
         <?php
-            if(isset($_SESSION['user'])) {
+            if(isset($_SESSION['user']) && isset($_SESSION['what'])) {
                 $user = $_SESSION['user'];
+                $what = $_SESSION['what'];
                 echo("
                 <div class='spacer'>
-                    <p> Welcome $user </p>
+                    <p> Welcome $user </p><br>
+                    <p>You are signed in as  $what</p>
+                    <p>
                 </div>
                 ");
             }
@@ -93,6 +96,7 @@
                                                                 $_SESSION['user'] = $user->getUsername();
                                                                 $_SESSION['login-password'] = $hashedPassword;
                                                                 $_SESSION['id'] = $user->getId();
+                                                                $_SESSION['what'] = $user->getIs();
                                                                 $GLOBALS['loggedIn']  = true;
                                                                 echo('<script> reload() </script>');
                                                             }
@@ -177,7 +181,7 @@
                         <div id="7" onclick="newsBlockOpen(7)" onmouseleave="newsBlockClose(7)">
                             <h1 id="70"> Requests</h1>
                             <?php
-                                $sqlGetAllRequests = $pdo->query("SELECT COUNT(*) as total FROM `requests`");
+                                $sqlGetAllRequests = $pdo->query("SELECT COUNT(`R_ID`) as total FROM `requests`");
                                 $sqlGetAllRequests->execute();
                                 $row = $sqlGetAllRequests ->fetch();
                                 $number = $row['total'];

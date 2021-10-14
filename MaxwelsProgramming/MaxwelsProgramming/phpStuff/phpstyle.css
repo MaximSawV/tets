@@ -609,4 +609,29 @@ a {
   width: 80%;
   overflow: auto; }
 
+.rateRequestField {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center; }
+
+.positiveRequest {
+  width: 95px;
+  height: 95px;
+  background: #4c4;
+  border: solid black 2px;
+  margin-right: 5px;
+  transition: 0.25s; }
+  .positiveRequest:hover {
+    border-color: white; }
+
+.negativeRequest {
+  width: 95px;
+  height: 95px;
+  background: red;
+  border: solid black 2px;
+  transition: 0.25s; }
+  .negativeRequest:hover {
+    border-color: white; }
+
 /*# sourceMappingURL=phpstyle.css.map */
